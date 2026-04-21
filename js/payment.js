@@ -1,7 +1,7 @@
 // ==========================================
 // НАСТРОЙКИ — вставьте свои данные
 // ==========================================
-const TELEGRAM_TOKEN = '8744858618:AAFFmHNmEKaBfJKoInwab85dgHnoc-ygJHE'; // получите новый у @BotFather
+const TELEGRAM_TOKEN = 'Я убрал токен '; // получите новый у @BotFather
 const TELEGRAM_CHAT_ID = '320502463';           // ваш chat_id — оставьте как есть
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/АБВ.../exec'; // из Google Apps Script
 

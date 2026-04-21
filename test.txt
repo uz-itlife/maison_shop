@@ -1,1 +1,3 @@
-👗
+git add .
+git commit -m "подключили2"
+git push
