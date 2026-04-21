@@ -1,8 +1,8 @@
 // ==========================================
 // НАСТРОЙКИ — вставьте свои данные
 // ==========================================
-const TELEGRAM_TOKEN = 'ВАШ_ТОКЕН_ОТ_BOTFATHER';
-const TELEGRAM_CHAT_ID = 'ВАШ_CHAT_ID';
+const TELEGRAM_TOKEN = '8744858618:AAFFmHNmEKaBfJKoInwab85dgHnoc-ygJHE';
+const TELEGRAM_CHAT_ID = '320502463';
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/АБВ.../exec';
 
 // ==========================================
@@ -52,7 +52,7 @@ ${order.items.map(i =>
 // ==========================================
 async function sendToSheets(order) {
   try {
-    await fetch(GOOGLE_SCRIPT_URL, {
+    await fetch('https://script.google.com/macros/s/AKfycbxKwipxtWlTMwXuwNM1Ev9ZIKUJMsWopibZayJerUygmAncJCDjmjyH8fmXy6Kwbzs4/exec', {
       method: 'POST',
       body: JSON.stringify({
         id: order.id,
