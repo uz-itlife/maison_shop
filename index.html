@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MAISON — Интернет-магазин</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/images/product-images.css" />
+  <link rel="stylesheet" href="css/modal.css" />
+  <script src="./js/script.js" defer></script>
+  
+
+ 
+</head>
+<body>
+
+  <!-- ✏️ ANNOUNCEMENT BAR — акция или информация -->
+  <div class="announcement">
+    🎁 Бесплатная доставка при заказе от 500 000 сум &nbsp;·&nbsp; Новая коллекция уже доступна
+  </div>
+
+  <!-- =========================================
+       HEADER
+  ========================================= -->
+  <header class="header">
+    <div class="container">
+      <nav class="nav">
+        <!-- ✏️ Замени MAISON на название своего бренда -->
+        <a href="#" class="nav-logo">MAI<span>S</span>ON</a>
+
+        <!-- ✏️ Меняй пункты меню под свои категории -->
+        <ul class="nav-links">
+          <li><a href="catalog.html">Каталог</a></li>
+          <li><a href="#products">Новинки</a></li>
+          <li><a href="#promo">Акции</a></li>
+          <li><a href="#about">О нас</a></li>
+          <li><a href="#contact">Контакты</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <button class="nav-icon-btn" title="Поиск" onclick="alert('Поиск — подключи к своей базе')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </button>
+          <button class="nav-icon-btn" title="Избранное" onclick="alert('Список желаний — добавь логику')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <button class="nav-icon-btn" title="Корзина" onclick="openCart()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <span class="cart-badge" id="cartBadge">0</span>
+          </button>
+          <button class="nav-icon-btn nav-hamburger" onclick="openMobileMenu()" title="Меню">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- =========================================
+       MOBILE MENU
+  ========================================= -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
+    <a href="catalog.html" class="mobile-nav-link" onclick="closeMobileMenu()">Каталог</a>
+    <a href="#products" class="mobile-nav-link" onclick="closeMobileMenu()">Новинки</a>
+    <a href="#promo" class="mobile-nav-link" onclick="closeMobileMenu()">Акции</a>
+    <a href="#about" class="mobile-nav-link" onclick="closeMobileMenu()">О нас</a>
+    <a href="#contact" class="mobile-nav-link" onclick="closeMobileMenu()">Контакты</a>
+  </div>
+
+  <!-- =========================================
+       HERO
+  ========================================= -->
+  <section class="hero">
+    <div class="container" style="display:contents">
+      <div class="hero-content container" style="display:flex; flex-direction:column; justify-content:center; padding-top:80px; padding-bottom:80px;">
+        <span class="section-label">Новая коллекция 2025</span>
+        <!-- ✏️ Главный заголовок страницы — адаптируй под свой товар -->
+        <h1 class="hero-title">
+          Стиль<br>рождается<br><em>изнутри</em>
+        </h1>
+        <p class="hero-subtitle">
+          Одежда для тех, кто ценит качество и самовыражение. 
+          Каждая вещь — история о тебе.
+        </p>
+        <div class="hero-actions">
+          <a href="#products" class="btn btn-primary">
+            Смотреть коллекцию
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="catalog.html" class="btn btn-outline">Каталог</a>
+        </div>
+        <!-- ✏️ Статистика — меняй цифры на реальные -->
+        <div class="hero-stats">
+          <div>
+            <div class="hero-stat-num">2K+</div>
+            <div class="hero-stat-label">Товаров</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">15K</div>
+            <div class="hero-stat-label">Клиентов</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">4.9★</div>
+            <div class="hero-stat-label">Рейтинг</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-image-wrap">
+        <!-- ✏️ Замени src на своё главное изображение -->
+        <div class="cat-placeholder cp-1" style="position:absolute;inset:0;width:100%;height:100%;font-size:8rem;opacity:0.4;"><img src="./css/images/products/dress5.jpeg" alt=""></div>
+      </div>
+      <div class="hero-image-overlay"></div>
+      <!-- ✏️ Плавающая карточка товара — меняй название и цену -->
+      <div class="hero-floating-badge">
+        <div class="badge-tag">Хит сезона</div>
+        <div class="badge-text">Silk Maxi Dress</div>
+        <div class="badge-price">от 850 000 сум</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-section">
+    <div class="marquee-track" id="marqueeTrack">
+      <!-- ✏️ Меняй текст бегущей строки -->
+      <div class="marquee-item"><span class="marquee-dot"></span>Бесплатная доставка</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Новая коллекция</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Возврат 30 дней</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Оригинальные товары</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Премиум качество</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Быстрая доставка</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Скидки до 40%</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Гарантия подлинности</div>
+      <!-- Дублируем для бесконечной прокрутки -->
+      <div class="marquee-item"><span class="marquee-dot"></span>Бесплатная доставка</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Новая коллекция</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Возврат 30 дней</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Оригинальные товары</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Премиум качество</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Быстрая доставка</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Скидки до 40%</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Гарантия подлинности</div>
+    </div>
+  </div>
+
+  <!-- =========================================
+       CATEGORIES
+  ========================================= -->
+  <section class="categories" id="categories">
+    <div class="container">
+      <div class="categories-header fade-up">
+        <div>
+          <div class="section-label">Ассортимент</div>
+          <h2 class="section-title">Наши <em>категории</em></h2>
+        </div>
+        <a href="#" class="btn btn-outline">Все категории</a>
+      </div>
+
+      <!-- ✏️ Меняй категории, эмодзи и количество товаров под свой магазин -->
+      <div class="categories-grid fade-up">
+        <div class="cat-card">
+          <div class="cat-placeholder cp-1"><img src="./css/images/products/dress6.jpg" alt=""></div>
+          <div class="cat-card-overlay"></div>
+          <div class="cat-card-content">
+            <div class="cat-card-tag">Тренд сезона</div>
+            <div class="cat-card-name">Женская одежда</div>
+            <div class="cat-card-count">348 товаров</div>
+          </div>
+        </div>
+        <div class="cat-card">
+          <div class="cat-placeholder cp-2"><img src="./css/images/products/pants2.jpg" alt=""></div>
+          <div class="cat-card-overlay"></div>
+          <div class="cat-card-content">
+            <div class="cat-card-tag">Бизнес-стиль</div>
+            <div class="cat-card-name">Мужская</div>
+            <div class="cat-card-count">214 товаров</div>
+          </div>
+        </div>
+        <div class="cat-card">
+          <div class="cat-placeholder cp-3"><img src="./css/images/products/sporttwear1.jpeg" alt=""></div>
+          <div class="cat-card-overlay"></div>
+          <div class="cat-card-content">
+            <div class="cat-card-tag">Новинки</div>
+            <div class="cat-card-name">Обувь</div>
+            <div class="cat-card-count">127 товаров</div>
+          </div>
+        </div>
+        <div class="cat-card">
+          <div class="cat-placeholder cp-4"><img src="./css/images/products/accessories1.jpg" alt=""></div>
+          <div class="cat-card-overlay"></div>
+          <div class="cat-card-content">
+            <div class="cat-card-tag">Завершай образ</div>
+            <div class="cat-card-name">Аксессуары</div>
+            <div class="cat-card-count">89 товаров</div>
+          </div>
+        </div>
+        <div class="cat-card">
+          <div class="cat-placeholder cp-5"><img src="./css/images/products/child1.jpeg" alt=""></div>
+          <div class="cat-card-overlay"></div>
+          <div class="cat-card-content">
+            <div class="cat-card-tag">Маленькие модники</div>
+            <div class="cat-card-name">Детская</div>
+            <div class="cat-card-count">163 товара</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       PRODUCTS
+  ========================================= -->
+  <section class="products" id="products">
+    <div class="container">
+      <div class="products-header fade-up">
+        <div>
+          <div class="section-label">Ассортимент</div>
+          <h2 class="section-title">Новые <em>поступления</em></h2>
+        </div>
+      </div>
+
+      <!-- Filter tabs -->
+      <div class="filter-tabs fade-up">
+        <button class="filter-tab active" onclick="filterProducts(this, 'all')">Все</button>
+        <button class="filter-tab" onclick="filterProducts(this, 'new')">Новинки</button>
+        <button class="filter-tab" onclick="filterProducts(this, 'sale')">Скидки</button>
+        <button class="filter-tab" onclick="filterProducts(this, 'hit')">Хиты</button>
+      </div>
+
+      <!-- ✏️ Меняй данные товаров в массиве products в JS ниже -->
+      <div class="products-grid" id="productsGrid">
+        <!-- Заполняется через JS -->
+      </div>
+
+      <div style="text-align:center; margin-top:48px;" class="fade-up">
+        <button id="loadMoreBtn" class="btn btn-outline" onclick="loadMore()">Загрузить ещё</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       PROMO / BANNERS
+  ========================================= -->
+  <section class="promo" id="promo">
+    <div class="container">
+      <div class="promo-inner">
+        <!-- ✏️ Первый промо-баннер — меняй текст и скидку -->
+        <div class="promo-card fade-up">
+          <div class="promo-card-bg promo-bg-1"></div>
+          <div class="promo-deco">40%</div>
+          <div class="promo-card-content">
+            <div class="promo-tag">🔥 Горячая акция</div>
+            <h3 class="promo-title">Летняя<br><em>распродажа</em></h3>
+            <p class="promo-desc">Скидки до 40% на всю летнюю коллекцию. Только ограниченное время!</p>
+            <div class="promo-countdown" id="countdown1">
+              <div class="countdown-item"><div class="countdown-num" id="c1-h">12</div><div class="countdown-label">Часов</div></div>
+              <div class="countdown-item"><div class="countdown-num" id="c1-m">34</div><div class="countdown-label">Минут</div></div>
+              <div class="countdown-item"><div class="countdown-num" id="c1-s">56</div><div class="countdown-label">Секунд</div></div>
+            </div>
+            <a href="#" class="btn btn-primary">Смотреть скидки</a>
+          </div>
+        </div>
+
+        <!-- ✏️ Второй промо-баннер -->
+        <div class="promo-card fade-up">
+          <div class="promo-card-bg promo-bg-2"></div>
+          <div class="promo-deco">NEW</div>
+          <div class="promo-card-content">
+            <div class="promo-tag">✨ Эксклюзив</div>
+            <h3 class="promo-title">Осенняя<br><em>коллекция</em></h3>
+            <p class="promo-desc">Первыми откройте новую коллекцию. Эксклюзивные модели, доступные только у нас.</p>
+            <div style="margin-bottom:32px;">
+              <div style="font-size:12px; color:var(--clr-muted); margin-bottom:8px; letter-spacing:0.1em; text-transform:uppercase;">Доступно с</div>
+              <div style="font-family:var(--font-display); font-size:1.6rem; font-weight:300; color:var(--clr-accent);">1 Сентября 2025</div>
+            </div>
+            <a href="#" class="btn btn-outline">Предзаказ</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       FEATURES / ПРЕИМУЩЕСТВА
+  ========================================= -->
+  <section class="features" id="about">
+    <div class="container">
+      <!-- ✏️ Меняй иконки и тексты преимуществ -->
+      <div class="features-grid">
+        <div class="feature-item fade-up">
+          <div class="feature-icon">🚚</div>
+          <div class="feature-title">Быстрая доставка</div>
+          <div class="feature-desc">Доставим в течение 1–3 дней по всему Узбекистану. Бесплатно от 500 000 сум.</div>
+        </div>
+        <div class="feature-item fade-up">
+          <div class="feature-icon">🔄</div>
+          <div class="feature-title">Возврат 30 дней</div>
+          <div class="feature-desc">Не подошло? Без вопросов вернём деньги в течение 30 дней после покупки.</div>
+        </div>
+        <div class="feature-item fade-up">
+          <div class="feature-icon">🔒</div>
+          <div class="feature-title">Безопасная оплата</div>
+          <div class="feature-desc">Принимаем Click, Payme, карты UZCARD и HUMO. Все транзакции защищены.</div>
+        </div>
+        <div class="feature-item fade-up">
+          <div class="feature-icon">💬</div>
+          <div class="feature-title">Поддержка 24/7</div>
+          <div class="feature-desc">Наша команда всегда на связи. Пишите в Telegram или звоните — ответим быстро.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       TESTIMONIALS
+  ========================================= -->
+  <section class="testimonials">
+    <div class="container">
+      <div class="testimonials-header fade-up">
+        <span class="section-label">Отзывы покупателей</span>
+        <h2 class="section-title">Что говорят<br>наши <em>клиенты</em></h2>
+      </div>
+      <!-- ✏️ Меняй отзывы на реальные -->
+      <div class="testimonials-grid">
+        <div class="testimonial-card fade-up">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">«Заказала платье онлайн — боялась, что не совпадёт с фото. Но качество превзошло все ожидания! Доставка за 2 дня, упаковка шикарная.»</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">М</div>
+            <div>
+              <div class="author-name">Малика Рашидова</div>
+              <div class="author-meta">Ташкент · 3 покупки</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card fade-up">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">«Отличный магазин! Купил пальто для жены в подарок. Она в восторге. Размер подошёл идеально по таблице размеров. Буду заказывать ещё.»</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">А</div>
+            <div>
+              <div class="author-name">Алишер Каримов</div>
+              <div class="author-meta">Самарканд · 5 покупок</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card fade-up">
+          <div class="testimonial-stars">★★★★☆</div>
+          <p class="testimonial-text">«Очень удобный сайт, легко нашла нужное. Поддержка ответила быстро, помогли с выбором размера. Товар пришёл аккуратно упакованным.»</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">Н</div>
+            <div>
+              <div class="author-name">Нилуфар Хасанова</div>
+              <div class="author-meta">Бухара · 2 покупки</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       INSTAGRAM / GALLERY
+  ========================================= -->
+  <section class="gallery">
+    <div class="container">
+      <div class="gallery-header fade-up">
+        <span class="section-label">Наш Instagram</span>
+        <h2 class="section-title">@maison_store</h2>
+        <!-- ✏️ Замени на свой аккаунт Instagram/Telegram -->
+      </div>
+      <div class="gallery-grid fade-up">
+        <div class="gallery-item"><div class="gallery-placeholder gp-1">👗</div><div class="gallery-overlay">📷</div></div>
+        <div class="gallery-item"><div class="gallery-placeholder gp-2">👔</div><div class="gallery-overlay">📷</div></div>
+        <div class="gallery-item"><div class="gallery-placeholder gp-3">👟</div><div class="gallery-overlay">📷</div></div>
+        <div class="gallery-item"><div class="gallery-placeholder gp-4">👒</div><div class="gallery-overlay">📷</div></div>
+        <div class="gallery-item"><div class="gallery-placeholder gp-5">🧣</div><div class="gallery-overlay">📷</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       NEWSLETTER
+  ========================================= -->
+  <section class="newsletter" id="contact">
+    <div class="container">
+      <div class="newsletter-inner fade-up">
+        <div>
+          <div class="section-label">Оставайся в курсе</div>
+          <h2 class="section-title">Подпишись на<br><em>новости</em></h2>
+          <p class="newsletter-desc">Первым узнавай о новых поступлениях, акциях и эксклюзивных предложениях. Подарим скидку 10% на первый заказ.</p>
+        </div>
+        <div class="newsletter-form">
+          <!-- ✏️ Подключи к своей email-системе (Mailchimp, SendPulse и т.д.) -->
+          <input type="text" class="form-input" placeholder="Ваше имя">
+          <div class="form-row">
+            <input type="email" class="form-input" placeholder="Email адрес">
+          </div>
+          <button class="btn btn-primary" onclick="subscribeNewsletter()">
+            Подписаться и получить скидку
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+          <p class="form-note">📧 Без спама. Отписаться можно в любой момент.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       FOOTER
+  ========================================= -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <!-- ✏️ Меняй описание бренда -->
+          <a href="#" class="nav-logo">MAI<span>S</span>ON</a>
+          <p class="footer-desc">Интернет-магазин одежды и аксессуаров. Мы помогаем находить свой стиль с 2020 года.</p>
+          <!-- <div class="footer-social">
+            <a href="#" class="social-btn" title="Instagram">📸</a>
+            <a href="#" class="social-btn" title="Telegram">✈️</a>
+            <a href="#" class="social-btn" title="YouTube">▶️</a>
+            <a href="#" class="social-btn" title="TikTok">🎵</a>
+          </div> -->
+
+          <div class="footer-social">
+    <a href="https://instagram.com/твой_ник" class="social-btn instagram" title="Instagram" target="_blank" rel="noopener">
+        <!-- Instagram SVG -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.5 6.5C17.5 5.67157 16.8284 5 16 5H8C7.17157 5 6.5 5.67157 6.5 6.5V17.5C6.5 18.3284 7.17157 19 8 19H16C16.8284 19 17.5 18.3284 17.5 17.5V6.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M15.5 12C15.5 13.933 13.933 15.5 12 15.5C10.067 15.5 8.5 13.933 8.5 12C8.5 10.067 10.067 8.5 12 8.5C13.933 8.5 15.5 10.067 15.5 12Z" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="16.5" cy="7.5" r="1" fill="currentColor"/>
+        </svg>
+    </a>
+
+    <a href="https://t.me/твой_ник" class="social-btn telegram" title="Telegram" target="_blank" rel="noopener">
+        <!-- Telegram SVG -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 5L2 12L9 14.5L11 19L13 15L19 18L21 5Z" fill="currentColor"/>
+        </svg>
+    </a>
+
+    <a href="https://youtube.com/@твой_канал" class="social-btn youtube" title="YouTube" target="_blank" rel="noopener">
+        <!-- YouTube SVG -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21.593 7.203C21.28 6.04 20.32 5.17 19.15 4.89C17.2 4.5 12 4.5 12 4.5C12 4.5 6.8 4.5 4.85 4.89C3.68 5.17 2.72 6.04 2.407 7.203C2 9.2 2 12 2 12C2 12 2 14.8 2.407 16.797C2.72 17.96 3.68 18.83 4.85 19.11C6.8 19.5 12 19.5 12 19.5C12 19.5 17.2 19.5 19.15 19.11C20.32 18.83 21.28 17.96 21.593 16.797C22 14.8 22 12 22 12C22 12 22 9.2 21.593 7.203Z" fill="currentColor"/>
+            <polygon points="10 15 15.5 12 10 9" fill="#fff"/>
+        </svg>
+    </a>
+
+    <a href="https://tiktok.com/@твой_ник" class="social-btn tiktok" title="TikTok" target="_blank" rel="noopener">
+        <!-- TikTok SVG -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19.5 9.5C18.12 9.5 17 8.38 17 7V2.5H14.5V15.5C14.5 17.43 12.93 19 11 19C9.07 19 7.5 17.43 7.5 15.5C7.5 13.57 9.07 12 11 12C11.64 12 12.23 12.19 12.75 12.5V9.5C10.82 9.5 9 11.32 9 13.25C9 15.18 10.82 17 12.75 17C14.68 17 16.5 15.18 16.5 13.25V9.5C18.43 9.5 19.5 10.57 19.5 12.5" fill="currentColor"/>
+        </svg>
+    </a>
+</div>
+        </div>
+
+        <!-- ✏️ Меняй ссылки под свою структуру сайта -->
+        <div>
+          <div class="footer-col-title">Магазин</div>
+          <ul class="footer-links">
+            <li><a href="catalog.html">Каталог</a></li>
+            <li><a href="#">Новинки</a></li>
+            <li><a href="#">Акции</a></li>
+            <li><a href="#">Бренды</a></li>
+            <li><a href="#">Подарочные карты</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Помощь</div>
+          <ul class="footer-links">
+            <li><a href="#">Как заказать</a></li>
+            <li><a href="#">Доставка и оплата</a></li>
+            <li><a href="#">Возврат товара</a></li>
+            <li><a href="#">Таблица размеров</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Контакты</div>
+          <ul class="footer-links">
+            <!-- ✏️ Замени на реальные контакты -->
+            <li><a href="tel:+998901234567">+998 90 123-45-67</a></li>
+            <li><a href="https://t.me/username" target="_blank">Telegram</a></li>
+            <li><a href="mailto:info@maison.uz">info@maison.uz</a></li>
+            <li> <a href="https://maps.app.goo.gl/pwUwhZxEK4i1ayPf9" target="_blank"  rel="noopener"> 📍 Открыть местоположение </a></li>
+            <li><a href="#">Ташкент, ул. Амира Темура 1</a></li>
+            <li><a href="#">Пн–Сб: 9:00 – 20:00</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <!-- ✏️ Меняй год и название -->
+        <p class="footer-copy">© 2025 MAISON. Все права защищены.</p>
+        <div class="footer-payments">
+          <span class="payment-icon">UZCARD</span>
+          <span class="payment-icon">HUMO</span>
+          <span class="payment-icon">Click</span>
+          <span class="payment-icon">Payme</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCROLL TO TOP -->
+  <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх">↑</button>
+
+  <!-- CART OVERLAY & DRAWER -->
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer-header">
+      <span class="cart-drawer-title">Корзина</span>
+      <button class="cart-close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-body" id="cartBody">
+      <div class="cart-empty">
+        <div class="cart-empty-icon">🛍️</div>
+        <div class="cart-empty-text">Корзина пуста</div>
+        <div style="font-size:13px; color:var(--clr-muted); margin-top:8px;">Добавьте товары из каталога</div>
+      </div>
+    </div>
+    <div class="cart-footer" id="cartFooter" style="display:none;">
+      <div class="cart-total">
+        <span class="cart-total-label">Итого</span>
+        <span class="cart-total-price" id="cartTotal">0 сум</span>
+      </div>
+      // В cart-footer замените кнопку на вызов модала оплаты
+<button class="cart-checkout" onclick="openCheckout()">Оформить заказ</button>
+    </div>
+  </div>
+
+
+  <div id="productModal" style="display:none"></div>
+
+
+  <div id="checkoutOverlay" onclick="closeCheckout()" 
+  style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500"></div>
+
+<div id="checkoutDrawer" 
+  style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:min(500px,95vw);max-height:90vh;overflow-y:auto;z-index:501;
+  background:var(--clr-surface);border-radius:12px;padding:24px">
+  <button onclick="closeCheckout()" 
+    style="position:absolute;top:16px;right:16px;background:none;border:none;
+    font-size:18px;cursor:pointer;color:var(--clr-muted)">✕</button>
+  <div id="checkoutContent"></div>
+</div>
+
+
+
+ </body>
+</html

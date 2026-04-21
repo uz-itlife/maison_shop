@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Каталог — MAISON</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  
+  <!-- Основные стили сайта -->
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/modal.css"/>
+  
+  <!-- Стили именно каталога -->
+  <link rel="stylesheet" href="css/catalog.css"/>
+
+  <script src="./js/payment.js"></script>
+
+  <style>
+    /* Здесь можно оставить пустым или добавить только очень специфичные правки */
+  </style>
+</head>
+<body>
+
+<!-- ANNOUNCEMENT -->
+<div class="announcement">
+  🎁 Бесплатная доставка при заказе от 500 000 сум · Новая коллекция уже доступна
+</div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="container">
+    <nav class="nav">
+      <a href="index.html" class="nav-logo">MAI<span>S</span>ON</a>
+      <ul class="nav-links">
+        <li><a href="catalog.html" style="color:var(--clr-accent)">Каталог</a></li>
+        <li><a href="index.html#products">Новинки</a></li>
+        <li><a href="index.html#promo">Акции</a></li>
+        <li><a href="index.html#about">О нас</a></li>
+        <li><a href="index.html#contact">Контакты</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="nav-icon-btn" title="Поиск" onclick="document.getElementById('catalogSearch').focus()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </button>
+        <button class="nav-icon-btn" title="Избранное">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
+        <button class="nav-icon-btn" title="Корзина" onclick="openCart()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="cart-badge" id="cartBadge">0</span>
+        </button>
+        <button class="nav-icon-btn nav-hamburger" onclick="openMobileMenu()">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
+  <a href="catalog.html" class="mobile-nav-link" onclick="closeMobileMenu()">Каталог</a>
+  <a href="index.html#products" class="mobile-nav-link" onclick="closeMobileMenu()">Новинки</a>
+  <a href="index.html#promo" class="mobile-nav-link" onclick="closeMobileMenu()">Акции</a>
+  <a href="index.html#about" class="mobile-nav-link" onclick="closeMobileMenu()">О нас</a>
+  <a href="index.html#contact" class="mobile-nav-link" onclick="closeMobileMenu()">Контакты</a>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="catalog-page-header">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="index.html">Главная</a>
+      <span class="breadcrumb-sep">›</span>
+      <span>Каталог</span>
+    </div>
+    <h1 class="catalog-page-title">Весь <em>каталог</em></h1>
+    <p class="catalog-page-sub" id="pageSubtitle">Загрузка товаров...</p>
+  </div>
+</div>
+
+<!-- MOBILE FILTER DRAWER -->
+<div class="filter-drawer-overlay" id="filterOverlay" onclick="closeFilterDrawer()"></div>
+<div class="filter-drawer" id="filterDrawer">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+    <span style="font-size:13px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase">Фильтры</span>
+    <button onclick="closeFilterDrawer()" style="font-size:20px;color:var(--clr-muted);background:none;border:none;cursor:pointer;">✕</button>
+  </div>
+  <div id="filterDrawerContent"></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+  <div class="catalog-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="filters-sidebar" id="filtersSidebar">
+      <div id="filtersContent"></div>
+    </aside>
+
+    <!-- CATALOG CONTENT -->
+    <div class="catalog-content">
+
+      <!-- TOOLBAR -->
+      <div class="catalog-toolbar">
+        <button class="mobile-filter-btn" onclick="openFilterDrawer()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/></svg>
+          Фильтры
+        </button>
+        <input type="text" id="catalogSearch" class="catalog-search" placeholder="Поиск товаров..." oninput="applyFilters()">
+        <select class="sort-select" id="sortSelect" onchange="applyFilters()">
+          <option value="default">По умолчанию</option>
+          <option value="price-asc">Цена: от низкой</option>
+          <option value="price-desc">Цена: от высокой</option>
+          <option value="name-asc">По названию А–Я</option>
+          <option value="stars">По рейтингу</option>
+          <option value="new">Сначала новинки</option>
+          <option value="sale">Сначала скидки</option>
+        </select>
+        <div class="view-toggle">
+          <button class="view-btn active" id="viewGrid" onclick="setView('grid')" title="Сетка">⊞</button>
+          <button class="view-btn" id="viewList" onclick="setView('list')" title="Список">☰</button>
+        </div>
+      </div>
+
+      <!-- ACTIVE FILTER TAGS -->
+      <div class="active-filters" id="activeTags"></div>
+
+      <!-- RESULTS INFO -->
+      <div class="results-info" id="resultsInfo"></div>
+
+      <!-- GRID -->
+      <div id="catalogGrid"></div>
+
+      <!-- LOAD MORE -->
+      <div class="catalog-load-more">
+        <button id="loadMoreBtn" class="btn btn-outline" onclick="catalogLoadMore()" style="display:none">Загрузить ещё</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="padding-top:32px;border-top:1px solid var(--clr-border);display:flex;align-items:center;justify-content:space-between;">
+      <p class="footer-copy">© 2025 MAISON. Все права защищены.</p>
+      <div class="footer-payments">
+        <span class="payment-icon">UZCARD</span>
+        <span class="payment-icon">HUMO</span>
+        <span class="payment-icon">Click</span>
+        <span class="payment-icon">Payme</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<!-- CART -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-drawer-header">
+    <span class="cart-drawer-title">Корзина</span>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty">
+      <div class="cart-empty-icon">🛍️</div>
+      <div class="cart-empty-text">Корзина пуста</div>
+    </div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total">
+      <span class="cart-total-label">Итого</span>
+      <span class="cart-total-price" id="cartTotal">0 сум</span>
+    </div>
+    <button class="cart-checkout" onclick="alert('Подключи платёжную систему')">Оформить заказ</button>
+  </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div id="productModal" style="display:none"></div>
+
+<!-- Основной скрипт сайта (header, cart, modal и т.д.) -->
+<script src="js/script.js" defer></script>
+<!-- Скрипт только для каталога -->
+<script src="js/catalog.js" defer></script>
+
+</body>
+</html>

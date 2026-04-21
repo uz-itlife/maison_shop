@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "name": "Шёлковое макси-платье",
+    "category": "Платья",
+    "price": 850000,
+    "oldPrice": null,
+    "badge": "new",
+    "filter": "new",
+    "stars": 5,
+    "sizes": ["XS", "S", "M", "L"],
+    "image": "images/products/dress-1.jpeg",
+    "description": "Элегантное платье из натурального шёлка. Идеально для особых случаев.",
+    "inStock": true
+  },
+  {
+    "id": 2,
+    "name": "Льняной блейзер",
+    "category": "Жакеты",
+    "price": 690000,
+    "oldPrice": 980000,
+    "badge": "hit",
+    "filter": "hit",
+    "stars": 5,
+    "sizes": ["S", "M", "L", "XL"],
+    "image": "images/products/dress-1-back.webp",
+    "description": "Лёгкий льняной блейзер — основа делового гардероба.",
+    "inStock": true
+  },
+  {
+    "id": 3,
+    "name": "Кожаные брюки Slim",
+    "category": "Брюки",
+    "price": 420000,
+    "oldPrice": 600000,
+    "badge": "sale",
+    "filter": "sale",
+    "stars": 4,
+    "sizes": ["XS", "S", "M"],
+    "image": "images/products/pants-1.webp",
+    "description": "Стильные брюки из эко-кожи, облегающий силуэт.",
+    "inStock": true
+  }
+]
