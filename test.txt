@@ -1,5 +1,5 @@
 git add .
-git commit -m "final fix"
+git commit -m "fix timezone"
 git push
 
 
@@ -19,3 +19,9 @@ git push
 
 
 sheets.google.com
+
+
+https://uz-itlife.github.io/maison_shop/
+
+
+https://maison-shops.netlify.app/

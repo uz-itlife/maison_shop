@@ -180,7 +180,8 @@ async function submitCheckout(total) {
 
   const order = {
     id: Math.floor(Math.random() * 90000 + 10000),
-    date: new Date().toISOString(),
+    date: new Date().toLocaleString('ru-RU', { timeZone: 'Asia/Tashkent' }),
+
     name, phone, addr, method, total,
     status: 'new',
     items: cart.map(i => ({
