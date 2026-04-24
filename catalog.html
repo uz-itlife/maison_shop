@@ -186,6 +186,21 @@
 <!-- PRODUCT MODAL -->
 <div id="productModal" style="display:none"></div>
 
+
+<div id="checkoutOverlay" onclick="closeCheckout()" 
+  style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500"></div>
+
+<div id="checkoutDrawer" 
+  style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:min(500px,95vw);max-height:90vh;overflow-y:auto;z-index:501;
+  background:var(--clr-surface);border-radius:12px;padding:24px">
+  <button onclick="closeCheckout()" 
+    style="position:absolute;top:16px;right:16px;background:none;border:none;
+    font-size:18px;cursor:pointer;color:var(--clr-muted)">✕</button>
+  <div id="checkoutContent"></div>
+</div>
+
+
 <!-- Основной скрипт сайта (header, cart, modal и т.д.) -->
 <script src="js/script.js" defer></script>
 <!-- Скрипт только для каталога -->
