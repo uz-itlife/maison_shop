@@ -17,48 +17,6 @@ async function fetchWithTimeout(url, options, ms = 5000) {
 
 
 // ==========================================
-// ОТПРАВКА В TELEGRAM
-// ==========================================
-async function sendToTelegram(order) {
-  const statusEmoji = {
-    click: '💙 Click',
-    payme: '💙 Payme',
-    cash: '💵 Наличные'
-  };
-
-  const text = `
-🛍 <b>Новый заказ #${order.id}</b>
-
-👤 <b>Покупатель:</b> ${order.name}
-📞 <b>Телефон:</b> ${order.phone}
-📍 <b>Адрес:</b> ${order.addr}
-💳 <b>Оплата:</b> ${statusEmoji[order.method] || order.method}
-
-🧾 <b>Товары:</b>
-${order.items.map(i =>
-  `• ${i.name}${i.selectedSize ? ` (${i.selectedSize})` : ''} × ${i.qty} шт. = ${(i.price * i.qty).toLocaleString('ru')} сум`
-).join('\n')}
-
-💰 <b>Итого: ${Number(order.total).toLocaleString('ru')} сум</b>
-🕐 ${new Date(order.date).toLocaleString('ru')}
-  `.trim();
-
-  await fetchWithTimeout(
-    `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: TELEGRAM_CHAT_ID,
-        text,
-        parse_mode: 'HTML'
-      })
-    },
-    5000
-  );
-}
-
-// ==========================================
 // ОТПРАВКА В GOOGLE SHEETS
 // ==========================================
 async function sendToSheets(order) {
@@ -264,12 +222,17 @@ async function submitCheckout(total) {
       </button>
     </div>`;
 
-  // 4. Отправляем в фоне — не блокируем UI
-  Promise.all([
-    sendToTelegram(order),
-    sendToSheets(order)
-  ]).catch(err => console.error('Фоновая отправка:', err));
-}
+  // 4. Отправляем на сервер Netlify в фоне — не блокируем UI
+  fetch('/.netlify/functions/order', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(order)
+  })
+  .then(response => {
+    if (!response.ok) throw new Error('Ошибка сервера');
+    console.log('Заказ успешно отправлен в Telegram и Таблицы');
+  })
+  .catch(err => console.error('Фоновая отправка не удалась:', err));
 
 // ==========================================
 // МОДАЛ ОФОРМЛЕНИЯ ЗАКАЗА
@@ -289,4 +252,5 @@ function closeCheckout() {
   document.getElementById('checkoutOverlay').style.display = 'none';
   document.getElementById('checkoutDrawer').style.display = 'none';
   document.body.style.overflow = '';
+}
 }
