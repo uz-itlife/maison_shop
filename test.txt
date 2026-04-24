@@ -1,5 +1,5 @@
 git add .
-git commit -m "fix scripts order"
+git commit -m "fix peyment"
 git push
 
 
