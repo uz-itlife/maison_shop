@@ -15,6 +15,7 @@ async function fetchWithTimeout(url, options, ms = 5000) {
   }
 }
 
+
 // ==========================================
 // ОТПРАВКА В TELEGRAM
 // ==========================================
@@ -93,15 +94,17 @@ function saveToLocalStorage(order) {
 // ГЛАВНАЯ ФУНКЦИЯ — вызывается при заказе
 // ==========================================
 async function saveOrder(order) {
-  // 1. Сохраняем локально СРАЗУ — это быстро
+  // Сохраняем локально
   saveToLocalStorage(order);
 
-  // 2. Отправляем в Telegram и Sheets В ФОНЕ — не блокируем UI
-  Promise.all([
-    sendToTelegram(order),
-    sendToSheets(order)
-  ]).catch(err => console.error('Фоновая отправка:', err));
+  // Отправляем на сервер Netlify в фоне
+  fetch('/.netlify/functions/order', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(order)
+  }).catch(err => console.error('Ошибка отправки:', err));
 }
+
 
 // ==========================================
 // ФОРМА ОФОРМЛЕНИЯ ЗАКАЗА
