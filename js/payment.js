@@ -163,7 +163,6 @@ function coFormatPhone(inp) {
   if (v.length > 7) r += ' ' + v.slice(7, 9);
   inp.value = r;
 }
-
 async function submitCheckout(total) {
   const name = document.getElementById('co-name').value.trim();
   const phone = document.getElementById('co-phone').value.trim();
@@ -181,8 +180,6 @@ async function submitCheckout(total) {
   const order = {
     id: Math.floor(Math.random() * 90000 + 10000),
     date: new Date(new Date().getTime() + (5 * 60 * 60 * 1000)).toISOString(),
-
-
     name, phone, addr, method, total,
     status: 'new',
     items: cart.map(i => ({
@@ -203,7 +200,7 @@ async function submitCheckout(total) {
   cart = [];
   updateCart();
 
-  // 3. Показываем успех СРАЗУ — не ждём Telegram/Sheets
+  // 3. Показываем успех СРАЗУ
   document.getElementById('checkoutContent').innerHTML = `
     <div style="text-align:center;padding:40px 20px">
       <div style="width:56px;height:56px;border-radius:50%;
@@ -224,7 +221,7 @@ async function submitCheckout(total) {
       </button>
     </div>`;
 
-  // 4. Отправляем на сервер Netlify в фоне — не блокируем UI
+  // 4. Отправляем на сервер Netlify в фоне
   fetch('/.netlify/functions/order', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -235,10 +232,9 @@ async function submitCheckout(total) {
     console.log('Заказ успешно отправлен в Telegram и Таблицы');
   })
   .catch(err => console.error('Фоновая отправка не удалась:', err));
+} // <--- Вот эта скобка была пропущена!
 
-// ==========================================
-// МОДАЛ ОФОРМЛЕНИЯ ЗАКАЗА
-// ==========================================
+// Теперь эти функции стоят ОТДЕЛЬНО, как и должно быть
 function openCheckout() {
   if (!cart.length) { showToast('Корзина пуста'); return; }
   const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
@@ -254,5 +250,4 @@ function closeCheckout() {
   document.getElementById('checkoutOverlay').style.display = 'none';
   document.getElementById('checkoutDrawer').style.display = 'none';
   document.body.style.overflow = '';
-}
 }
