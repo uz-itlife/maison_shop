@@ -180,7 +180,8 @@ async function submitCheckout(total) {
 
   const order = {
     id: Math.floor(Math.random() * 90000 + 10000),
-    date: new Date().toLocaleString('ru-RU', { timeZone: 'Asia/Tashkent' }),
+    date: new Date(new Date().getTime() + (5 * 60 * 60 * 1000)).toISOString(),
+
 
     name, phone, addr, method, total,
     status: 'new',
