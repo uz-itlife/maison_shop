@@ -52,17 +52,18 @@ function saveToLocalStorage(order) {
 // ГЛАВНАЯ ФУНКЦИЯ — вызывается при заказе
 // ==========================================
 async function saveOrder(order) {
-  // Сохраняем локально
+  // 1. Сохраняем локально СРАЗУ
   saveToLocalStorage(order);
 
-  // Отправляем на сервер Netlify в фоне
-  fetch('/.netlify/functions/order', {
+  // 2. Отправляем через Vercel Function в фоне
+  fetch('/api/order', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(order)
-  }).catch(err => console.error('Ошибка отправки:', err));
+  })
+  .then(r => { if (!r.ok) throw new Error('Ошибка сервера'); })
+  .catch(err => console.error('Фоновая отправка не удалась:', err));
 }
-
 
 // ==========================================
 // ФОРМА ОФОРМЛЕНИЯ ЗАКАЗА
