@@ -223,7 +223,7 @@ async function submitCheckout(total) {
     </div>`;
 
   // 4. Отправляем на сервер Netlify в фоне
-  fetch('/.netlify/functions/order', {
+  fetch('/api/order', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(order)
