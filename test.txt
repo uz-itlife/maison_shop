@@ -24,4 +24,8 @@ sheets.google.com
 https://uz-itlife.github.io/maison_shop/
 
 
-https://maison-shops.netlify.app/
+https://maison-shop-eta.vercel.app/index.html
+
+https://maison-stores.vercel.app/catalog.html
+
+https://vercel.com/uz-itlifes-projects/maison-shop
