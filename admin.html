@@ -568,7 +568,7 @@
 
       const base64Data = compressed.replace(/^data:[^;]+;base64,/, '');
       const form = new FormData();
-      form.append('key', '6d207e02198a847aa98d0a2a901485a5');
+      form.append('key', 'fe98603de1962fd58c55061737b0e5f0');
       form.append('image', base64Data);
 
       const res = await fetch('https://api.imgbb.com/1/upload', {
@@ -699,7 +699,7 @@
         const compressed = await compressBase64(base64, 800, 0.75);
         const base64Data = compressed.replace(/^data:[^;]+;base64,/, '');
         const form = new FormData();
-        form.append('key', '6d207e02198a847aa98d0a2a901485a5');
+        form.append('key', 'fe98603de1962fd58c55061737b0e5f0');
         form.append('image', base64Data);
 
         const res = await fetch('https://api.imgbb.com/1/upload', {
