@@ -537,22 +537,57 @@
   // =========================================
   // PREVIEW ФОТО
   // =========================================
-  function previewImage(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      const src = ev.target.result;
-      document.getElementById('imagePreview').src = src;
-      document.getElementById('imagePreview').style.display = 'block';
-      document.getElementById('uploadIcon').style.display = 'none';
-      document.getElementById('uploadText').textContent = file.name;
-      document.getElementById('imageUrl').value = '';
-      window._pendingImageData = src;
-    };
-    reader.readAsDataURL(file);
-  }
+async function previewImage(e) {
+  const file = e.target.files[0];
+  if (!file) return;
 
+  // Показываем превью сразу
+  const reader = new FileReader();
+  reader.onload = ev => {
+    document.getElementById('imagePreview').src = ev.target.result;
+    document.getElementById('imagePreview').style.display = 'block';
+    document.getElementById('uploadIcon').style.display = 'none';
+    document.getElementById('uploadText').textContent = '⏳ Загружаем...';
+    document.getElementById('imageUrl').value = '';
+    window._pendingBase64 = ev.target.result; // временно храним base64
+  };
+  reader.readAsDataURL(file);
+
+  // Читаем файл как base64 и отправляем через наш прокси /api/upload
+  const toBase64 = f => new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(r.result);
+    r.onerror = reject;
+    r.readAsDataURL(f);
+  });
+
+  try {
+    const base64 = await toBase64(file);
+
+    const res = await fetch('/api/upload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ base64, filename: file.name })
+    });
+
+    const data = await res.json();
+
+    if (data.url) {
+      window._pendingImageData = data.url;
+      document.getElementById('uploadText').textContent = '✅ Загружено';
+      document.getElementById('imagePreview').src = data.url;
+      document.getElementById('imageUrl').value = data.url;
+      showToast('✅ Фото загружено на сервер');
+    } else {
+      throw new Error(data.error || 'Нет URL');
+    }
+  } catch (err) {
+    // Fallback — base64 локально
+    window._pendingImageData = window._pendingBase64;
+    document.getElementById('uploadText').textContent = file.name + ' (локально)';
+    console.warn('Прокси недоступен, используем base64:', err);
+  }
+}
   // =========================================
   // СОХРАНИТЬ ТОВАР
   // =========================================
@@ -572,18 +607,46 @@
     const imageUrl = document.getElementById('imageUrl').value.trim();
     const sizes = [...document.querySelectorAll('.size-chip.selected')].map(c=>c.textContent);
 
-    if (editingId) {
-      const idx = products.findIndex(p=>p.id===editingId);
-      products[idx] = { ...products[idx], name, category, price, oldPrice, badge, filter:badge, stars, inStock, description, sizes, image: imageUrl || products[idx].image };
-      if (window._pendingImageData) { imageDataStore[editingId] = window._pendingImageData; localStorage.setItem('maison_images', JSON.stringify(imageDataStore)); }
-      showToast('✅ Товар обновлён');
-    } else {
-      const id = Date.now();
-      products.push({ id, name, category, price, oldPrice, badge, filter:badge, stars, inStock, description, sizes, image: imageUrl });
-      if (window._pendingImageData) { imageDataStore[id] = window._pendingImageData; localStorage.setItem('maison_images', JSON.stringify(imageDataStore)); }
-      showToast('✅ Товар добавлен');
-    }
+    // СТАЛО:
+// Определяем финальный URL фото
+const finalImage = window._pendingImageData && window._pendingImageData.startsWith('https://')
+  ? window._pendingImageData  // Telegraph URL — постоянный
+  : (imageUrl || null);
 
+if (editingId) {
+  const idx = products.findIndex(p => p.id === editingId);
+  const oldImage = products[idx].image;
+
+  // Если новое фото — Telegraph URL, сохраняем в image и убираем из imageDataStore
+  if (finalImage && finalImage.startsWith('https://')) {
+    delete imageDataStore[editingId];
+    localStorage.setItem('maison_images', JSON.stringify(imageDataStore));
+    products[idx] = { ...products[idx], name, category, price, oldPrice, badge, filter:badge, stars, inStock, description, sizes, image: finalImage };
+  } else if (window._pendingImageData) {
+    // base64 fallback
+    imageDataStore[editingId] = window._pendingImageData;
+    localStorage.setItem('maison_images', JSON.stringify(imageDataStore));
+    products[idx] = { ...products[idx], name, category, price, oldPrice, badge, filter:badge, stars, inStock, description, sizes, image: imageUrl || oldImage };
+  } else {
+    products[idx] = { ...products[idx], name, category, price, oldPrice, badge, filter:badge, stars, inStock, description, sizes, image: imageUrl || oldImage };
+  }
+  showToast('✅ Товар обновлён');
+} else {
+  const id = Date.now();
+  const newImage = (finalImage && finalImage.startsWith('https://'))
+    ? finalImage
+    : (imageUrl || '');
+
+  products.push({ id, name, category, price, oldPrice, badge, filter:badge, stars, inStock, description, sizes, image: newImage, colors:[] });
+
+  if (window._pendingImageData && !window._pendingImageData.startsWith('https://')) {
+    imageDataStore[id] = window._pendingImageData;
+    localStorage.setItem('maison_images', JSON.stringify(imageDataStore));
+  }
+  showToast('✅ Товар добавлен');
+}
+
+window._pendingImageData = null;
     window._pendingImageData = null;
     save();
     closeModal();

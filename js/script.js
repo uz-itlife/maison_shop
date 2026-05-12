@@ -310,13 +310,15 @@ function addToCartFromModal(id) {
   if (existing) {
     existing.qty += pmQty;
   } else {
-    cart.push({
-      ...p,
-      cartKey,
-      qty: pmQty,
-      selectedSize: selectedSize || null,
-      selectedColor: selectedColor || null,
-    });
+   // СТАЛО:
+cart.push({
+  ...p,
+  cartKey,
+  qty: pmQty,
+  selectedSize: selectedSize || null,
+  selectedColor: selectedColor || null,
+  imageData: null, // не храним base64 в корзине
+});
   }
 
   pmQty = 1;
@@ -358,7 +360,9 @@ function updateCart() {
   }
 
   body.innerHTML = cart.map(i => {
-    const imgSrc = i.imageData || i.image;
+    const imgSrc = (i.imageData && i.imageData.startsWith('https://'))
+  ? i.imageData
+  : (i.image && i.image.startsWith('http') ? i.image : null);
     const imgBlock = imgSrc
       ? `<img src="${imgSrc}" style="width:72px;height:88px;object-fit:cover;border-radius:4px;flex-shrink:0" alt="${i.name}" onerror="this.style.display='none'">`
       : `<div class="cart-item-img ${getCatColor(i.category)}" style="flex-shrink:0">${getCatEmoji(i.category)}</div>`;
@@ -652,17 +656,15 @@ saveCart();
 
 function saveCart() {
   try {
-    // Не сохраняем imageData — это base64 и он огромный
     const cartToSave = cart.map(i => {
       const { imageData, ...rest } = i;
-      return rest;
+      return rest; // сохраняем всё кроме imageData (base64)
     });
     localStorage.setItem('maison_cart', JSON.stringify(cartToSave));
   } catch (e) {
     console.warn('saveCart: localStorage переполнен', e);
   }
 }
-
 document.addEventListener('DOMContentLoaded', () => {
   // Восстанавливаем корзину из localStorage
   const saved = localStorage.getItem('maison_cart');
