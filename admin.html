@@ -545,81 +545,54 @@
   // =========================================
   // ЗАГРУЗКА ФОТО
   // =========================================
- async function previewImage(e) {
-  const file = e.target.files[0];
-  if (!file) return;
+  async function previewImage(e) {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  // Показываем превью сразу
-  const reader = new FileReader();
-  reader.onload = ev => {
-    document.getElementById('imagePreview').src = ev.target.result;
-    document.getElementById('imagePreview').style.display = 'block';
-    document.getElementById('uploadIcon').style.display = 'none';
-    document.getElementById('uploadText').textContent = '⏳ Сжимаем и загружаем...';
-    document.getElementById('imageUrl').value = '';
-    window._pendingBase64 = ev.target.result;
-  };
-  reader.readAsDataURL(file);
-
-  try {
-    // ← СЖИМАЕМ фото перед отправкой
-    const compressed = await compressImage(file, 800, 0.75);
-    console.log('Сжато:', Math.round(compressed.length / 1024), 'KB');
-
-    const res = await fetch('/api/upload', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ base64: compressed, filename: file.name })
-    });
-
-    const data = await res.json();
-
-    if (data.url) {
-      window._pendingImageData = data.url;
-      document.getElementById('uploadText').textContent = '☁️ Загружено на Telegraph';
-      document.getElementById('imagePreview').src = data.url;
-      document.getElementById('imageUrl').value = data.url;
-      showToast('✅ Фото загружено навсегда');
-    } else {
-      throw new Error(data.error || 'Нет URL');
-    }
-  } catch (err) {
-    window._pendingImageData = window._pendingBase64;
-    document.getElementById('uploadText').textContent = '💾 ' + file.name + ' (локально)';
-    console.warn('Ошибка загрузки:', err);
-  }
-}
-
-// ← НОВАЯ функция сжатия
-function compressImage(file, maxWidth, quality) {
-  return new Promise((resolve) => {
+    // Показываем превью сразу
     const reader = new FileReader();
     reader.onload = ev => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        let w = img.width;
-        let h = img.height;
-
-        // Уменьшаем если больше maxWidth
-        if (w > maxWidth) {
-          h = Math.round(h * maxWidth / w);
-          w = maxWidth;
-        }
-
-        canvas.width = w;
-        canvas.height = h;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, w, h);
-
-        // Конвертируем в JPEG с нужным качеством
-        resolve(canvas.toDataURL('image/jpeg', quality));
-      };
-      img.src = ev.target.result;
+      document.getElementById('imagePreview').src = ev.target.result;
+      document.getElementById('imagePreview').style.display = 'block';
+      document.getElementById('uploadIcon').style.display = 'none';
+      document.getElementById('uploadText').textContent = '⏳ Загружаем на сервер...';
+      document.getElementById('imageUrl').value = '';
+      window._pendingBase64 = ev.target.result;
     };
     reader.readAsDataURL(file);
-  });
-}
+
+    // Загружаем напрямую на ImgBB из браузера (без сервера)
+    try {
+      const compressed = await compressImage(file, 800, 0.75);
+      console.log('Сжато:', Math.round(compressed.length / 1024), 'KB');
+
+      const base64Data = compressed.replace(/^data:[^;]+;base64,/, '');
+      const form = new FormData();
+      form.append('key', '6d207e02198a847aa98d0a2a901485a5');
+      form.append('image', base64Data);
+
+      const res = await fetch('https://api.imgbb.com/1/upload', {
+        method: 'POST',
+        body: form
+      });
+      const data = await res.json();
+      console.log('ImgBB:', data);
+
+      if (data.success && data.data?.url) {
+        window._pendingImageData = data.data.url;
+        document.getElementById('uploadText').textContent = '☁️ Загружено!';
+        document.getElementById('imagePreview').src = data.data.url;
+        document.getElementById('imageUrl').value = data.data.url;
+        showToast('✅ Фото загружено навсегда');
+      } else {
+        throw new Error(JSON.stringify(data));
+      }
+    } catch (err) {
+      window._pendingImageData = window._pendingBase64;
+      document.getElementById('uploadText').textContent = '💾 ' + file.name + ' (локально)';
+      console.warn('ImgBB недоступен, используем base64:', err);
+    }
+  }
 
   // =========================================
   // СОХРАНИТЬ ТОВАР
@@ -724,20 +697,24 @@ function compressImage(file, maxWidth, quality) {
 
       try {
         const compressed = await compressBase64(base64, 800, 0.75);
-const res = await fetch('/api/upload', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ base64: compressed, filename: `product-${id}.jpg` })
-});
+        const base64Data = compressed.replace(/^data:[^;]+;base64,/, '');
+        const form = new FormData();
+        form.append('key', '6d207e02198a847aa98d0a2a901485a5');
+        form.append('image', base64Data);
+
+        const res = await fetch('https://api.imgbb.com/1/upload', {
+          method: 'POST',
+          body: form
+        });
         const data = await res.json();
 
-        if (data.url) {
-          // Сохраняем URL в product.image и удаляем из imageDataStore
+        if (data.success && data.data?.url) {
           const idx = products.findIndex(p => String(p.id) === String(id));
-          if (idx !== -1) products[idx].image = data.url;
+          if (idx !== -1) products[idx].image = data.data.url;
           delete imageDataStore[id];
           done++;
         } else {
+          console.error('ImgBB error:', data);
           errors++;
         }
       } catch (err) {
@@ -745,8 +722,7 @@ const res = await fetch('/api/upload', {
         console.error(`Ошибка для товара ${id}:`, err);
       }
 
-      // Пауза чтобы не спамить Telegraph
-      await new Promise(r => setTimeout(r, 300));
+      await new Promise(r => setTimeout(r, 500));
     }
 
     // Сохраняем результат
@@ -763,21 +739,6 @@ const res = await fetch('/api/upload', {
 
     setTimeout(() => progress.classList.remove('show'), 5000);
   }
-
-  function compressBase64(base64, maxWidth, quality) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      let w = img.width, h = img.height;
-      if (w > maxWidth) { h = Math.round(h * maxWidth / w); w = maxWidth; }
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      resolve(canvas.toDataURL('image/jpeg', quality));
-    };
-    img.src = base64;
-  });
-}
 
   // =========================================
   // ЭКСПОРТ / ИМПОРТ JSON
