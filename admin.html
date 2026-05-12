@@ -19,10 +19,8 @@
     a { color: inherit; text-decoration: none; }
     button { cursor: pointer; border: none; font-family: inherit; }
 
-    /* LAYOUT */
     .admin-layout { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
 
-    /* SIDEBAR */
     .sidebar { background: var(--surface); border-right: 1px solid var(--border); padding: 24px 0; position: sticky; top: 0; height: 100vh; }
     .sidebar-logo { padding: 0 20px 24px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
     .sidebar-logo-text { font-size: 1.4rem; letter-spacing: 0.08em; }
@@ -36,20 +34,17 @@
     .sidebar-back a { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; transition: color var(--tr); }
     .sidebar-back a:hover { color: var(--accent); }
 
-    /* MAIN */
     .main { padding: 32px 40px; }
     .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
     .page-title { font-size: 1.5rem; font-weight: 300; }
     .page-subtitle { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
-    /* STATS */
     .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
     .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
     .stat-label { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
     .stat-value { font-size: 1.8rem; font-weight: 300; color: var(--accent); }
     .stat-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
-    /* BUTTONS */
     .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: var(--radius); font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; transition: var(--tr); }
     .btn-primary { background: var(--accent); color: var(--bg); }
     .btn-primary:hover { background: var(--accent2); }
@@ -57,17 +52,17 @@
     .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
     .btn-danger { background: transparent; color: var(--danger); border: 1px solid rgba(201,68,68,0.3); }
     .btn-danger:hover { background: rgba(201,68,68,0.1); }
+    .btn-success { background: transparent; color: var(--success); border: 1px solid rgba(74,140,74,0.4); }
+    .btn-success:hover { background: rgba(74,140,74,0.1); }
     .btn-sm { padding: 6px 14px; font-size: 11px; }
     .btn-icon { width: 34px; height: 34px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: var(--radius); font-size: 15px; }
 
-    /* TOOLBAR */
     .toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
     .search-input { flex: 1; min-width: 200px; padding: 9px 16px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: inherit; font-size: 13px; outline: none; transition: border-color var(--tr); }
     .search-input::placeholder { color: var(--muted); }
     .search-input:focus { border-color: var(--accent); }
     .filter-select { padding: 9px 14px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: inherit; font-size: 13px; outline: none; cursor: pointer; }
 
-    /* TABLE */
     .table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
     table { width: 100%; border-collapse: collapse; }
     th { padding: 12px 16px; text-align: left; font-size: 10px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.02); white-space: nowrap; }
@@ -96,7 +91,6 @@
 
     .actions { display: flex; gap: 6px; }
 
-    /* MODAL */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
     .modal-overlay.open { display: flex; }
     .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; }
@@ -107,7 +101,6 @@
     .modal-body { padding: 24px 28px; }
     .modal-footer { padding: 16px 28px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
 
-    /* FORM */
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     .form-group.full { grid-column: 1 / -1; }
@@ -118,7 +111,6 @@
     textarea { resize: vertical; min-height: 80px; }
     select option { background: var(--card); }
 
-    /* IMAGE UPLOAD */
     .upload-zone { border: 1px dashed var(--border); border-radius: var(--radius); padding: 24px; text-align: center; cursor: pointer; transition: var(--tr); position: relative; }
     .upload-zone:hover { border-color: var(--accent); background: rgba(201,169,110,0.04); }
     .upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
@@ -127,24 +119,32 @@
     .upload-hint { font-size: 11px; color: var(--muted); margin-top: 4px; opacity: 0.6; }
     .upload-preview { width: 80px; height: 96px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border); display: none; margin: 0 auto 8px; }
 
-    /* SIZES */
     .sizes-row { display: flex; gap: 8px; flex-wrap: wrap; }
     .size-chip { padding: 5px 12px; border-radius: 100px; border: 1px solid var(--border); font-size: 12px; cursor: pointer; transition: var(--tr); background: transparent; color: var(--muted); }
     .size-chip.selected { background: var(--accent); border-color: var(--accent); color: var(--bg); }
 
-    /* TOAST */
     .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(60px); background: var(--accent); color: var(--bg); padding: 12px 24px; border-radius: 100px; font-size: 13px; font-weight: 500; z-index: 9999; opacity: 0; transition: all 0.3s; white-space: nowrap; pointer-events: none; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* EXPORT */
     .export-box { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; margin-top: 20px; }
     .export-title { font-size: 12px; font-weight: 500; margin-bottom: 8px; }
     .export-desc { font-size: 12px; color: var(--muted); margin-bottom: 12px; line-height: 1.6; }
     .code-block { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 16px; font-family: monospace; font-size: 12px; color: var(--muted); overflow-x: auto; white-space: pre; }
 
-    /* EMPTY */
     .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
     .empty-icon { font-size: 3rem; margin-bottom: 12px; opacity: 0.3; }
+
+    /* Прогресс миграции */
+    .migrate-progress { display: none; margin-top: 12px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 16px; font-size: 12px; color: var(--muted); }
+    .migrate-progress.show { display: block; }
+    .progress-bar-wrap { background: var(--bg); border-radius: 100px; height: 6px; margin-top: 8px; overflow: hidden; }
+    .progress-bar { height: 100%; background: var(--accent); border-radius: 100px; transition: width 0.3s; width: 0%; }
+
+    /* Иконка статуса фото */
+    .photo-status { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; padding: 2px 8px; border-radius: 100px; }
+    .photo-status.cloud { background: rgba(74,140,74,0.15); color: var(--success); }
+    .photo-status.local { background: rgba(201,169,110,0.15); color: var(--accent); }
+    .photo-status.none { background: rgba(255,255,255,0.05); color: var(--muted); }
 
     @media (max-width: 900px) {
       .admin-layout { grid-template-columns: 1fr; }
@@ -224,9 +224,18 @@
         <option value="sale">Скидки</option>
         <option value="hit">Хиты</option>
       </select>
-      <button class="btn btn-outline btn-sm" onclick="exportJSON()" title="Скачать products.json">⬇ Экспорт JSON</button>
-      <button class="btn btn-outline btn-sm" onclick="document.getElementById('importFile').click()" title="Загрузить products.json">⬆ Импорт</button>
+      <button class="btn btn-outline btn-sm" onclick="exportJSON()">⬇ Экспорт JSON</button>
+      <button class="btn btn-outline btn-sm" onclick="document.getElementById('importFile').click()">⬆ Импорт</button>
+      <button class="btn btn-success btn-sm" onclick="migrateAllPhotos()" id="migrateBtn">☁️ Фото → Telegraph</button>
       <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
+    </div>
+
+    <!-- MIGRATE PROGRESS -->
+    <div class="migrate-progress" id="migrateProgress">
+      <div id="migrateText">Загружаем фото на Telegraph...</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar" id="migrateBar"></div>
+      </div>
     </div>
 
     <!-- TABLE -->
@@ -238,7 +247,7 @@
             <th>Цена</th>
             <th>Тег</th>
             <th>Размеры</th>
-            <th>Наличие</th>
+            <th>Фото</th>
             <th>Действия</th>
           </tr>
         </thead>
@@ -257,15 +266,14 @@
       <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Структура папок:</div>
       <div class="code-block">project/
 ├── index.html
-├── admin.html          ← эта страница
+├── admin.html
 ├── css/style.css
 ├── js/script.js
-├── data/
-│   └── products.json   ← база товаров (экспортируй сюда)
-└── images/
-    └── products/
-        ├── dress-1.jpg
-        └── blazer-1.jpg</div>
+├── api/
+│   ├── config.js
+│   └── upload.js
+└── data/
+    └── products.json</div>
     </div>
   </main>
 </div>
@@ -290,7 +298,7 @@
             <div class="upload-text" id="uploadText">Нажмите или перетащите фото</div>
             <div class="upload-hint">JPG, PNG, WebP — рекомендуется 600×750px</div>
           </div>
-          <input type="text" id="imageUrl" placeholder="Или укажите URL фото: images/products/dress-1.jpg" style="margin-top:8px;">
+          <input type="text" id="imageUrl" placeholder="Или укажите URL фото" style="margin-top:8px;">
         </div>
 
         <div class="form-group full">
@@ -370,14 +378,10 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  // =========================================
-  // ХРАНИЛИЩЕ — localStorage (работает без сервера)
-  // =========================================
   let products = JSON.parse(localStorage.getItem('maison_products') || '[]');
   let imageDataStore = JSON.parse(localStorage.getItem('maison_images') || '{}');
   let editingId = null;
 
-  // Начальные тестовые товары
   if (products.length === 0) {
     products = [
       { id:1, name:"Шёлковое макси-платье", category:"Платья", price:850000, oldPrice:null, badge:"new", filter:"new", stars:5, sizes:["S","M","L"], image:"", description:"Элегантное платье из натурального шёлка.", inStock:true },
@@ -401,12 +405,25 @@
       return;
     }
     tbody.innerHTML = list.map(p => {
-      const imgSrc = imageDataStore[p.id] || p.image;
+      const imgSrc = p.image && p.image.startsWith('https://') ? p.image : (imageDataStore[p.id] || p.image);
       const thumb = imgSrc
         ? `<div class="product-thumb"><img src="${imgSrc}" alt="${p.name}" onerror="this.parentNode.innerHTML='👗'"></div>`
         : `<div class="product-thumb">${getCatEmoji(p.category)}</div>`;
       const badgeMap = { new:'badge-new', sale:'badge-sale', hit:'badge-hit' };
       const badgeLabel = { new:'Новинка', sale:'Скидка', hit:'Хит' };
+
+      // Статус фото
+      let photoStatus = '';
+      if (p.image && p.image.startsWith('https://telegra.ph')) {
+        photoStatus = '<span class="photo-status cloud">☁️ Telegraph</span>';
+      } else if (p.image && p.image.startsWith('https://')) {
+        photoStatus = '<span class="photo-status cloud">🔗 URL</span>';
+      } else if (imageDataStore[p.id]) {
+        photoStatus = '<span class="photo-status local">💾 Локально</span>';
+      } else {
+        photoStatus = '<span class="photo-status none">— нет</span>';
+      }
+
       return `
         <tr>
           <td>
@@ -424,12 +441,7 @@
           </td>
           <td><span class="badge ${badgeMap[p.badge]}">${badgeLabel[p.badge]||p.badge}</span></td>
           <td style="font-size:12px;color:var(--muted)">${(p.sizes||[]).join(', ') || '—'}</td>
-          <td>
-            <span class="stock-dot">
-              <span class="dot ${p.inStock ? 'dot-green' : 'dot-red'}"></span>
-              ${p.inStock ? 'Есть' : 'Нет'}
-            </span>
-          </td>
+          <td>${photoStatus}</td>
           <td>
             <div class="actions">
               <button class="btn btn-outline btn-icon btn-sm" onclick="openEditModal(${p.id})" title="Редактировать">✏️</button>
@@ -461,21 +473,20 @@
     const q = document.getElementById('searchInput').value.toLowerCase();
     const cat = document.getElementById('filterCategory').value;
     const badge = document.getElementById('filterBadge').value;
-    const filtered = products.filter(p => {
-      return (!q || p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q))
-        && (!cat || p.category === cat)
-        && (!badge || p.badge === badge);
-    });
+    const filtered = products.filter(p =>
+      (!q || p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q))
+      && (!cat || p.category === cat)
+      && (!badge || p.badge === badge)
+    );
     renderTable(filtered);
   }
 
   // =========================================
-  // MODAL — открыть/закрыть
+  // MODAL
   // =========================================
   function openAddModal() {
     editingId = null;
     document.getElementById('modalTitle').textContent = 'Добавить товар';
-    document.getElementById('editId').value = '';
     clearForm();
     document.getElementById('modalOverlay').classList.add('open');
   }
@@ -495,17 +506,12 @@
     document.getElementById('fDesc').value = p.description || '';
     document.getElementById('imageUrl').value = p.image || '';
 
-    const stored = imageDataStore[p.id];
-    if (stored) {
-      document.getElementById('imagePreview').src = stored;
+    const imgSrc = p.image && p.image.startsWith('https://') ? p.image : imageDataStore[p.id];
+    if (imgSrc) {
+      document.getElementById('imagePreview').src = imgSrc;
       document.getElementById('imagePreview').style.display = 'block';
       document.getElementById('uploadIcon').style.display = 'none';
-      document.getElementById('uploadText').textContent = 'Фото загружено';
-    } else if (p.image) {
-      document.getElementById('imagePreview').src = p.image;
-      document.getElementById('imagePreview').style.display = 'block';
-      document.getElementById('uploadIcon').style.display = 'none';
-      document.getElementById('uploadText').textContent = p.image;
+      document.getElementById('uploadText').textContent = p.image && p.image.startsWith('https://telegra.ph') ? '☁️ Telegraph URL' : 'Фото загружено';
     }
 
     document.querySelectorAll('.size-chip').forEach(chip => {
@@ -530,124 +536,118 @@
     document.getElementById('uploadText').textContent = 'Нажмите или перетащите фото';
     document.getElementById('imageFile').value = '';
     document.querySelectorAll('.size-chip').forEach(c => c.classList.remove('selected'));
+    window._pendingImageData = null;
+    window._pendingBase64 = null;
   }
 
   function toggleSize(btn) { btn.classList.toggle('selected'); }
 
   // =========================================
-  // PREVIEW ФОТО
+  // ЗАГРУЗКА ФОТО
   // =========================================
-async function previewImage(e) {
-  const file = e.target.files[0];
-  if (!file) return;
+  async function previewImage(e) {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  // Показываем превью сразу
-  const reader = new FileReader();
-  reader.onload = ev => {
-    document.getElementById('imagePreview').src = ev.target.result;
-    document.getElementById('imagePreview').style.display = 'block';
-    document.getElementById('uploadIcon').style.display = 'none';
-    document.getElementById('uploadText').textContent = '⏳ Загружаем...';
-    document.getElementById('imageUrl').value = '';
-    window._pendingBase64 = ev.target.result; // временно храним base64
-  };
-  reader.readAsDataURL(file);
+    // Показываем превью сразу
+    const reader = new FileReader();
+    reader.onload = ev => {
+      document.getElementById('imagePreview').src = ev.target.result;
+      document.getElementById('imagePreview').style.display = 'block';
+      document.getElementById('uploadIcon').style.display = 'none';
+      document.getElementById('uploadText').textContent = '⏳ Загружаем на сервер...';
+      document.getElementById('imageUrl').value = '';
+      window._pendingBase64 = ev.target.result;
+    };
+    reader.readAsDataURL(file);
 
-  // Читаем файл как base64 и отправляем через наш прокси /api/upload
-  const toBase64 = f => new Promise((resolve, reject) => {
-    const r = new FileReader();
-    r.onload = () => resolve(r.result);
-    r.onerror = reject;
-    r.readAsDataURL(f);
-  });
+    // Загружаем через /api/upload → Telegraph
+    try {
+      const toBase64 = f => new Promise((resolve, reject) => {
+        const r = new FileReader();
+        r.onload = () => resolve(r.result);
+        r.onerror = reject;
+        r.readAsDataURL(f);
+      });
 
-  try {
-    const base64 = await toBase64(file);
+      const base64 = await toBase64(file);
 
-    const res = await fetch('/api/upload', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ base64, filename: file.name })
-    });
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ base64, filename: file.name })
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (data.url) {
-      window._pendingImageData = data.url;
-      document.getElementById('uploadText').textContent = '✅ Загружено';
-      document.getElementById('imagePreview').src = data.url;
-      document.getElementById('imageUrl').value = data.url;
-      showToast('✅ Фото загружено на сервер');
-    } else {
-      throw new Error(data.error || 'Нет URL');
+      if (data.url) {
+        window._pendingImageData = data.url;
+        document.getElementById('uploadText').textContent = '☁️ Загружено на Telegraph';
+        document.getElementById('imagePreview').src = data.url;
+        document.getElementById('imageUrl').value = data.url;
+        showToast('✅ Фото загружено навсегда');
+      } else {
+        throw new Error(data.error || 'Нет URL');
+      }
+    } catch (err) {
+      // Fallback — base64 локально
+      window._pendingImageData = window._pendingBase64;
+      document.getElementById('uploadText').textContent = '💾 ' + file.name + ' (локально)';
+      console.warn('Telegraph недоступен, используем base64:', err);
     }
-  } catch (err) {
-    // Fallback — base64 локально
-    window._pendingImageData = window._pendingBase64;
-    document.getElementById('uploadText').textContent = file.name + ' (локально)';
-    console.warn('Прокси недоступен, используем base64:', err);
   }
-}
+
   // =========================================
   // СОХРАНИТЬ ТОВАР
   // =========================================
   function saveProduct() {
-    const name = document.getElementById('fName').value.trim();
+    const name     = document.getElementById('fName').value.trim();
     const category = document.getElementById('fCategory').value.trim();
-    const price = parseInt(document.getElementById('fPrice').value);
-    if (!name) return showToast('⚠️ Введите название товара');
-    if (!category) return showToast('⚠️ Введите категорию');
+    const price    = parseInt(document.getElementById('fPrice').value);
+    if (!name)            return showToast('⚠️ Введите название товара');
+    if (!category)        return showToast('⚠️ Введите категорию');
     if (!price || price <= 0) return showToast('⚠️ Введите корректную цену');
 
-    const oldPrice = parseInt(document.getElementById('fOldPrice').value) || null;
-    const badge = document.getElementById('fBadge').value;
-    const stars = parseInt(document.getElementById('fStars').value);
-    const inStock = document.getElementById('fInStock').value === 'true';
+    const oldPrice    = parseInt(document.getElementById('fOldPrice').value) || null;
+    const badge       = document.getElementById('fBadge').value;
+    const stars       = parseInt(document.getElementById('fStars').value);
+    const inStock     = document.getElementById('fInStock').value === 'true';
     const description = document.getElementById('fDesc').value.trim();
-    const imageUrl = document.getElementById('imageUrl').value.trim();
-    const sizes = [...document.querySelectorAll('.size-chip.selected')].map(c=>c.textContent);
+    const imageUrl    = document.getElementById('imageUrl').value.trim();
+    const sizes       = [...document.querySelectorAll('.size-chip.selected')].map(c => c.textContent);
 
-    // СТАЛО:
-// Определяем финальный URL фото
-const finalImage = window._pendingImageData && window._pendingImageData.startsWith('https://')
-  ? window._pendingImageData  // Telegraph URL — постоянный
-  : (imageUrl || null);
+    const pending   = window._pendingImageData;
+    const isUrl     = pending && pending.startsWith('https://');
+    const isBase64  = pending && pending.startsWith('data:');
 
-if (editingId) {
-  const idx = products.findIndex(p => p.id === editingId);
-  const oldImage = products[idx].image;
+    if (editingId) {
+      const idx = products.findIndex(p => p.id === editingId);
+      if (isUrl) {
+        delete imageDataStore[editingId];
+        products[idx] = { ...products[idx], name, category, price, oldPrice, badge, filter:badge, stars, inStock, description, sizes, image: pending };
+      } else if (isBase64) {
+        imageDataStore[editingId] = pending;
+        products[idx] = { ...products[idx], name, category, price, oldPrice, badge, filter:badge, stars, inStock, description, sizes };
+      } else {
+        products[idx] = { ...products[idx], name, category, price, oldPrice, badge, filter:badge, stars, inStock, description, sizes, image: imageUrl || products[idx].image };
+      }
+      showToast('✅ Товар обновлён');
+    } else {
+      const id = Date.now();
+      if (isUrl) {
+        products.push({ id, name, category, price, oldPrice, badge, filter:badge, stars, inStock, description, sizes, image: pending, colors:[] });
+      } else if (isBase64) {
+        imageDataStore[id] = pending;
+        products.push({ id, name, category, price, oldPrice, badge, filter:badge, stars, inStock, description, sizes, image: imageUrl || '', colors:[] });
+      } else {
+        products.push({ id, name, category, price, oldPrice, badge, filter:badge, stars, inStock, description, sizes, image: imageUrl || '', colors:[] });
+      }
+      showToast('✅ Товар добавлен');
+    }
 
-  // Если новое фото — Telegraph URL, сохраняем в image и убираем из imageDataStore
-  if (finalImage && finalImage.startsWith('https://')) {
-    delete imageDataStore[editingId];
     localStorage.setItem('maison_images', JSON.stringify(imageDataStore));
-    products[idx] = { ...products[idx], name, category, price, oldPrice, badge, filter:badge, stars, inStock, description, sizes, image: finalImage };
-  } else if (window._pendingImageData) {
-    // base64 fallback
-    imageDataStore[editingId] = window._pendingImageData;
-    localStorage.setItem('maison_images', JSON.stringify(imageDataStore));
-    products[idx] = { ...products[idx], name, category, price, oldPrice, badge, filter:badge, stars, inStock, description, sizes, image: imageUrl || oldImage };
-  } else {
-    products[idx] = { ...products[idx], name, category, price, oldPrice, badge, filter:badge, stars, inStock, description, sizes, image: imageUrl || oldImage };
-  }
-  showToast('✅ Товар обновлён');
-} else {
-  const id = Date.now();
-  const newImage = (finalImage && finalImage.startsWith('https://'))
-    ? finalImage
-    : (imageUrl || '');
-
-  products.push({ id, name, category, price, oldPrice, badge, filter:badge, stars, inStock, description, sizes, image: newImage, colors:[] });
-
-  if (window._pendingImageData && !window._pendingImageData.startsWith('https://')) {
-    imageDataStore[id] = window._pendingImageData;
-    localStorage.setItem('maison_images', JSON.stringify(imageDataStore));
-  }
-  showToast('✅ Товар добавлен');
-}
-
-window._pendingImageData = null;
     window._pendingImageData = null;
+    window._pendingBase64 = null;
     save();
     closeModal();
     updateStats();
@@ -659,11 +659,84 @@ window._pendingImageData = null;
   // =========================================
   function deleteProduct(id) {
     if (!confirm('Удалить этот товар?')) return;
-    products = products.filter(p=>p.id!==id);
+    products = products.filter(p => p.id !== id);
     delete imageDataStore[id];
     localStorage.setItem('maison_images', JSON.stringify(imageDataStore));
     save(); updateStats(); filterTable();
     showToast('🗑 Товар удалён');
+  }
+
+  // =========================================
+  // МИГРАЦИЯ ВСЕХ ФОТО НА TELEGRAPH
+  // =========================================
+  async function migrateAllPhotos() {
+    // Собираем товары у которых фото в base64 (в imageDataStore)
+    const toMigrate = Object.keys(imageDataStore).filter(id => {
+      const val = imageDataStore[id];
+      return val && val.startsWith('data:');
+    });
+
+    if (!toMigrate.length) {
+      showToast('✅ Все фото уже на Telegraph');
+      return;
+    }
+
+    const btn = document.getElementById('migrateBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Загружаем...';
+
+    const progress = document.getElementById('migrateProgress');
+    const bar = document.getElementById('migrateBar');
+    const text = document.getElementById('migrateText');
+    progress.classList.add('show');
+
+    let done = 0;
+    let errors = 0;
+
+    for (const id of toMigrate) {
+      const base64 = imageDataStore[id];
+      text.textContent = `Загружаем ${done + 1} из ${toMigrate.length}...`;
+      bar.style.width = ((done / toMigrate.length) * 100) + '%';
+
+      try {
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ base64, filename: `product-${id}.jpg` })
+        });
+        const data = await res.json();
+
+        if (data.url) {
+          // Сохраняем URL в product.image и удаляем из imageDataStore
+          const idx = products.findIndex(p => String(p.id) === String(id));
+          if (idx !== -1) products[idx].image = data.url;
+          delete imageDataStore[id];
+          done++;
+        } else {
+          errors++;
+        }
+      } catch (err) {
+        errors++;
+        console.error(`Ошибка для товара ${id}:`, err);
+      }
+
+      // Пауза чтобы не спамить Telegraph
+      await new Promise(r => setTimeout(r, 300));
+    }
+
+    // Сохраняем результат
+    localStorage.setItem('maison_images', JSON.stringify(imageDataStore));
+    save();
+    updateStats();
+    filterTable();
+
+    bar.style.width = '100%';
+    text.textContent = `✅ Готово! Загружено: ${done}, ошибок: ${errors}`;
+    btn.disabled = false;
+    btn.textContent = '☁️ Фото → Telegraph';
+    showToast(`✅ Загружено ${done} фото на Telegraph`);
+
+    setTimeout(() => progress.classList.remove('show'), 5000);
   }
 
   // =========================================
@@ -672,7 +745,8 @@ window._pendingImageData = null;
   function exportJSON() {
     const exportData = products.map(p => ({
       ...p,
-      imageData: imageDataStore[p.id] || null
+      // Включаем base64 только если нет Telegraph URL
+      imageData: (!p.image || !p.image.startsWith('https://')) ? (imageDataStore[p.id] || null) : null
     }));
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type:'application/json' });
     const a = document.createElement('a');
@@ -690,11 +764,16 @@ window._pendingImageData = null;
       try {
         const data = JSON.parse(ev.target.result);
         if (!Array.isArray(data)) throw new Error();
-        data.forEach(p => { if (p.imageData) { imageDataStore[p.id] = p.imageData; delete p.imageData; } });
+        data.forEach(p => {
+          if (p.imageData) {
+            imageDataStore[p.id] = p.imageData;
+            delete p.imageData;
+          }
+        });
         products = data;
         localStorage.setItem('maison_images', JSON.stringify(imageDataStore));
         save(); updateStats(); filterTable();
-        showToast(`✅ Импортировано ${data.length} товаров`);
+        showToast(`✅ Импортировано ${data.length} товаров. Нажмите "☁️ Фото → Telegraph" для загрузки фото.`);
       } catch { showToast('❌ Неверный формат файла'); }
     };
     reader.readAsText(file);
@@ -708,14 +787,12 @@ window._pendingImageData = null;
     const t = document.getElementById('toast');
     t.textContent = msg;
     t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2800);
+    setTimeout(() => t.classList.remove('show'), 3500);
   }
 
-  // ESCAPE закрывает modal
   document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
   document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target===e.currentTarget) closeModal(); });
 
-  // INIT
   updateStats();
   filterTable();
 </script>
