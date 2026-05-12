@@ -545,57 +545,81 @@
   // =========================================
   // ЗАГРУЗКА ФОТО
   // =========================================
-  async function previewImage(e) {
-    const file = e.target.files[0];
-    if (!file) return;
+ async function previewImage(e) {
+  const file = e.target.files[0];
+  if (!file) return;
 
-    // Показываем превью сразу
+  // Показываем превью сразу
+  const reader = new FileReader();
+  reader.onload = ev => {
+    document.getElementById('imagePreview').src = ev.target.result;
+    document.getElementById('imagePreview').style.display = 'block';
+    document.getElementById('uploadIcon').style.display = 'none';
+    document.getElementById('uploadText').textContent = '⏳ Сжимаем и загружаем...';
+    document.getElementById('imageUrl').value = '';
+    window._pendingBase64 = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+
+  try {
+    // ← СЖИМАЕМ фото перед отправкой
+    const compressed = await compressImage(file, 800, 0.75);
+    console.log('Сжато:', Math.round(compressed.length / 1024), 'KB');
+
+    const res = await fetch('/api/upload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ base64: compressed, filename: file.name })
+    });
+
+    const data = await res.json();
+
+    if (data.url) {
+      window._pendingImageData = data.url;
+      document.getElementById('uploadText').textContent = '☁️ Загружено на Telegraph';
+      document.getElementById('imagePreview').src = data.url;
+      document.getElementById('imageUrl').value = data.url;
+      showToast('✅ Фото загружено навсегда');
+    } else {
+      throw new Error(data.error || 'Нет URL');
+    }
+  } catch (err) {
+    window._pendingImageData = window._pendingBase64;
+    document.getElementById('uploadText').textContent = '💾 ' + file.name + ' (локально)';
+    console.warn('Ошибка загрузки:', err);
+  }
+}
+
+// ← НОВАЯ функция сжатия
+function compressImage(file, maxWidth, quality) {
+  return new Promise((resolve) => {
     const reader = new FileReader();
     reader.onload = ev => {
-      document.getElementById('imagePreview').src = ev.target.result;
-      document.getElementById('imagePreview').style.display = 'block';
-      document.getElementById('uploadIcon').style.display = 'none';
-      document.getElementById('uploadText').textContent = '⏳ Загружаем на сервер...';
-      document.getElementById('imageUrl').value = '';
-      window._pendingBase64 = ev.target.result;
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let w = img.width;
+        let h = img.height;
+
+        // Уменьшаем если больше maxWidth
+        if (w > maxWidth) {
+          h = Math.round(h * maxWidth / w);
+          w = maxWidth;
+        }
+
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+
+        // Конвертируем в JPEG с нужным качеством
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.src = ev.target.result;
     };
     reader.readAsDataURL(file);
-
-    // Загружаем через /api/upload → Telegraph
-    try {
-      const toBase64 = f => new Promise((resolve, reject) => {
-        const r = new FileReader();
-        r.onload = () => resolve(r.result);
-        r.onerror = reject;
-        r.readAsDataURL(f);
-      });
-
-      const base64 = await toBase64(file);
-
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ base64, filename: file.name })
-      });
-
-      const data = await res.json();
-
-      if (data.url) {
-        window._pendingImageData = data.url;
-        document.getElementById('uploadText').textContent = '☁️ Загружено на Telegraph';
-        document.getElementById('imagePreview').src = data.url;
-        document.getElementById('imageUrl').value = data.url;
-        showToast('✅ Фото загружено навсегда');
-      } else {
-        throw new Error(data.error || 'Нет URL');
-      }
-    } catch (err) {
-      // Fallback — base64 локально
-      window._pendingImageData = window._pendingBase64;
-      document.getElementById('uploadText').textContent = '💾 ' + file.name + ' (локально)';
-      console.warn('Telegraph недоступен, используем base64:', err);
-    }
-  }
+  });
+}
 
   // =========================================
   // СОХРАНИТЬ ТОВАР
@@ -699,11 +723,12 @@
       bar.style.width = ((done / toMigrate.length) * 100) + '%';
 
       try {
-        const res = await fetch('/api/upload', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ base64, filename: `product-${id}.jpg` })
-        });
+        const compressed = await compressBase64(base64, 800, 0.75);
+const res = await fetch('/api/upload', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ base64: compressed, filename: `product-${id}.jpg` })
+});
         const data = await res.json();
 
         if (data.url) {
@@ -738,6 +763,21 @@
 
     setTimeout(() => progress.classList.remove('show'), 5000);
   }
+
+  function compressBase64(base64, maxWidth, quality) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      let w = img.width, h = img.height;
+      if (w > maxWidth) { h = Math.round(h * maxWidth / w); w = maxWidth; }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.src = base64;
+  });
+}
 
   // =========================================
   // ЭКСПОРТ / ИМПОРТ JSON
