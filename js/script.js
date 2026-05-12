@@ -211,7 +211,7 @@ function openProductModal(id) {
           <div class="pm-section">
             <div class="pm-section-label">Размер: <span id="selectedSizeName">—</span></div>
             <div class="pm-sizes">${sizesHtml}</div>
-            <a href="#" class="pm-size-guide" onclick="showToast('Таблица размеров — добавь свою');return false;">Таблица размеров →</a>
+            <a href="size-chart.html" class="pm-size-guide" target="_blank" rel="noopener">Таблица размеров →</a>
           </div>` : ''}
 
           <div class="pm-qty-row">
@@ -321,6 +321,7 @@ function addToCartFromModal(id) {
 
   pmQty = 1;
   updateCart();
+  saveCart();
   closeProductModal();
   openCart();
   showToast(`"${p.name}" добавлен в корзину`);
@@ -332,11 +333,13 @@ function addToCartFromModal(id) {
 function addToCart(id) {
   // Открываем модал вместо прямого добавления
   openProductModal(id);
+
 }
 
 function removeFromCart(key) {
   cart = cart.filter(i => i.cartKey !== key);
   updateCart();
+  saveCart();
 }
 
 function updateCart() {
@@ -398,6 +401,7 @@ function changeCartQty(key, delta) {
   if (!item) return;
   item.qty = Math.max(1, item.qty + delta);
   updateCart();
+  saveCart(); 
 }
 
 function openCart() {
@@ -613,9 +617,9 @@ function submitCheckout(total) {
   try {
     await saveOrder(order); // → localStorage + Telegram + Sheets
 
-    // Очищаем корзину
     cart = [];
-    updateCart();
+updateCart();
+saveCart();
 
     // Показываем успех
     document.getElementById('checkoutContent').innerHTML = `
@@ -645,3 +649,33 @@ function submitCheckout(total) {
   }
 }
 }
+
+function saveCart() {
+  try {
+    // Не сохраняем imageData — это base64 и он огромный
+    const cartToSave = cart.map(i => {
+      const { imageData, ...rest } = i;
+      return rest;
+    });
+    localStorage.setItem('maison_cart', JSON.stringify(cartToSave));
+  } catch (e) {
+    console.warn('saveCart: localStorage переполнен', e);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Восстанавливаем корзину из localStorage
+  const saved = localStorage.getItem('maison_cart');
+  if (saved) {
+    try { cart = JSON.parse(saved); } catch { cart = []; }
+  }
+
+  loadProducts();
+  startCountdown();
+  observeFadeUp();
+  updateCart(); // обновляем бейдж и содержимое
+});
+
+
+
+

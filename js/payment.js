@@ -1,4 +1,23 @@
+// ==========================================
+// КОНФИГ — fallback для локальной разработки
 
+
+let _cfg = null;
+
+async function getConfig() {
+  if (_cfg) return _cfg;
+  try {
+    const res = await fetch('/api/config');
+    if (res.ok) {
+      _cfg = await res.json();
+      return _cfg;
+    }
+  } catch {}
+
+  // Берём в момент вызова — к этому времени config.local.js уже загружен
+  _cfg = window.LOCAL_CONFIG || { tgToken: '', tgChat: '', sheetsUrl: '' };
+  return _cfg;
+}
 // ==========================================
 // ЗАПРОС С ТАЙМАУТОМ — не зависает
 // ==========================================
@@ -9,60 +28,126 @@ async function fetchWithTimeout(url, options, ms = 5000) {
     const res = await fetch(url, { ...options, signal: controller.signal });
     return res;
   } catch (err) {
-    return null; // таймаут или ошибка — не блокируем заказ
+    return null;
   } finally {
     clearTimeout(timer);
   }
 }
 
+// ==========================================
+// ОТПРАВКА В TELEGRAM
+// ==========================================
+async function sendToTelegram(order) {
+  const cfg = await getConfig();
+  if (!cfg.tgToken || !cfg.tgChat) {
+    console.warn('⚠️ Telegram не настроен');
+    return;
+  }
+
+  const items = order.items
+    .map(i =>
+      `• ${i.name}${i.selectedSize ? ' / ' + i.selectedSize : ''} × ${i.qty} шт. = ${(i.price * i.qty).toLocaleString('ru')} сум`
+    )
+    .join('\n');
+
+  const text =
+    `🛍 <b>Новый заказ #${order.id}</b>\n\n` +
+    `👤 <b>Покупатель:</b> ${order.name}\n` +
+    `📞 <b>Телефон:</b> ${order.phone}\n` +
+    `📍 <b>Адрес:</b> ${order.addr}\n` +
+    `💳 <b>Оплата:</b> ${order.method === 'click' ? 'Click' : 'Payme'}\n\n` +
+    `📋 <b>Товары:</b>\n${items}\n\n` +
+    `💰 <b>Итого: ${order.total.toLocaleString('ru')} сум</b>\n` +
+    `🕐 ${order.date}`;
+
+  try {
+    const res = await fetch(
+      `https://api.telegram.org/bot${cfg.tgToken}/sendMessage`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: cfg.tgChat, text, parse_mode: 'HTML' })
+      }
+    );
+    const data = await res.json();
+    if (data.ok) console.log('✅ Telegram OK');
+    else console.error('❌ Telegram:', data.description);
+  } catch (err) {
+    console.error('❌ Telegram error:', err);
+  }
+}
 
 // ==========================================
 // ОТПРАВКА В GOOGLE SHEETS
 // ==========================================
 async function sendToSheets(order) {
-  await fetchWithTimeout(
-    GOOGLE_SCRIPT_URL,
-    {
+  const cfg = await getConfig();
+  if (!cfg.sheetsUrl) {
+    console.warn('⚠️ Google Sheets не настроен');
+    return;
+  }
+
+  try {
+    await fetch(cfg.sheetsUrl, {
       method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        id: order.id,
-        date: new Date(order.date).toLocaleString('ru'),
-        name: order.name,
-        phone: order.phone,
-        addr: order.addr,
+        id:     order.id,
+        date: order.date,
+        name:   order.name,
+        phone:  order.phone,
+        addr:   order.addr,
         method: order.method,
-        total: order.total,
-        items: order.items
+        total:  order.total,
+        items:  order.items.map(i => `${i.name} x${i.qty}`).join(', ')
       })
-    },
-    5000
-  );
+    });
+    console.log('✅ Sheets OK');
+  } catch (err) {
+    console.error('❌ Sheets error:', err);
+  }
 }
 
 // ==========================================
 // СОХРАНЕНИЕ В LOCALSTORAGE
 // ==========================================
 function saveToLocalStorage(order) {
-  const orders = JSON.parse(localStorage.getItem('maison_orders') || '[]');
-  orders.unshift(order);
-  localStorage.setItem('maison_orders', JSON.stringify(orders));
-}
+  try {
+    const orders = JSON.parse(localStorage.getItem('maison_orders') || '[]');
 
+    // Убираем imageData из товаров — экономим место
+    const orderToSave = {
+      ...order,
+      items: order.items.map(i => {
+        const { imageData, ...rest } = i;
+        return rest;
+      })
+    };
+
+    orders.unshift(orderToSave);
+
+    // Храним максимум 20 последних заказов
+    if (orders.length > 20) orders.splice(20);
+
+    localStorage.setItem('maison_orders', JSON.stringify(orders));
+  } catch (e) {
+    console.warn('saveToLocalStorage: localStorage переполнен, очищаем старые заказы');
+    try {
+      // Аварийная очистка — оставляем только текущий заказ
+      localStorage.setItem('maison_orders', JSON.stringify([order]));
+    } catch (e2) {
+      localStorage.removeItem('maison_orders');
+    }
+  }
+}
 // ==========================================
 // ГЛАВНАЯ ФУНКЦИЯ — вызывается при заказе
 // ==========================================
 async function saveOrder(order) {
-  // 1. Сохраняем локально СРАЗУ
   saveToLocalStorage(order);
-
-  // 2. Отправляем через Vercel Function в фоне
-  fetch('/api/order', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(order)
-  })
-  .then(r => { if (!r.ok) throw new Error('Ошибка сервера'); })
-  .catch(err => console.error('Фоновая отправка не удалась:', err));
+  sendToTelegram(order);
+  sendToSheets(order);
 }
 
 // ==========================================
@@ -164,33 +249,34 @@ function coFormatPhone(inp) {
   if (v.length > 7) r += ' ' + v.slice(7, 9);
   inp.value = r;
 }
+
 async function submitCheckout(total) {
-  const name = document.getElementById('co-name').value.trim();
-  const phone = document.getElementById('co-phone').value.trim();
-  const addr = document.getElementById('co-addr').value.trim();
+  const name   = document.getElementById('co-name').value.trim();
+  const phone  = document.getElementById('co-phone').value.trim();
+  const addr   = document.getElementById('co-addr').value.trim();
   const method = document.querySelector('input[name=pay]:checked')?.value;
 
-  if (!name) { showToast('⚠️ Введите имя'); return; }
+  if (!name)  { showToast('⚠️ Введите имя');     return; }
   if (phone.replace(/\D/g, '').length < 12) { showToast('⚠️ Введите телефон'); return; }
-  if (!addr) { showToast('⚠️ Введите адрес'); return; }
+  if (!addr)  { showToast('⚠️ Введите адрес');   return; }
 
   const btn = document.getElementById('co-btn');
   btn.textContent = 'Оформляем...';
   btn.disabled = true;
 
   const order = {
-    id: Math.floor(Math.random() * 90000 + 10000),
-    date: new Date(new Date().getTime() + (5 * 60 * 60 * 1000)).toISOString(),
+    id:     Math.floor(Math.random() * 90000 + 10000),
+    date: new Date().toLocaleString('ru-UZ', { timeZone: 'Asia/Tashkent' }),
     name, phone, addr, method, total,
     status: 'new',
     items: cart.map(i => ({
-      name: i.name,
-      category: i.category,
-      price: i.price,
-      qty: i.qty,
-      selectedSize: i.selectedSize || null,
+      name:          i.name,
+      category:      i.category,
+      price:         i.price,
+      qty:           i.qty,
+      selectedSize:  i.selectedSize  || null,
       selectedColor: i.selectedColor || null,
-      imageData: i.imageData || null,
+      imageData:     i.imageData     || null,
     }))
   };
 
@@ -200,6 +286,7 @@ async function submitCheckout(total) {
   // 2. Очищаем корзину СРАЗУ
   cart = [];
   updateCart();
+  saveCart(); // сохраняем пустую корзину в localStorage
 
   // 3. Показываем успех СРАЗУ
   document.getElementById('checkoutContent').innerHTML = `
@@ -222,33 +309,27 @@ async function submitCheckout(total) {
       </button>
     </div>`;
 
-  // 4. Отправляем на сервер Netlify в фоне
-  fetch('/api/order', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(order)
-  })
-  .then(response => {
-    if (!response.ok) throw new Error('Ошибка сервера');
-    console.log('Заказ успешно отправлен в Telegram и Таблицы');
-  })
-  .catch(err => console.error('Фоновая отправка не удалась:', err));
-} // <--- Вот эта скобка была пропущена!
+  // 4. Отправляем в Telegram и Google Sheets в фоне
+  sendToTelegram(order);
+  sendToSheets(order);
+}
 
-// Теперь эти функции стоят ОТДЕЛЬНО, как и должно быть
+// ==========================================
+// ОТКРЫТИЕ / ЗАКРЫТИЕ ОФОРМЛЕНИЯ ЗАКАЗА
+// ==========================================
 function openCheckout() {
   if (!cart.length) { showToast('Корзина пуста'); return; }
   const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
   const count = cart.reduce((s, i) => s + i.qty, 0);
   document.getElementById('checkoutContent').innerHTML = buildCheckoutForm(total, count);
   document.getElementById('checkoutOverlay').style.display = 'block';
-  document.getElementById('checkoutDrawer').style.display = 'block';
+  document.getElementById('checkoutDrawer').style.display  = 'block';
   document.body.style.overflow = 'hidden';
   closeCart();
 }
 
 function closeCheckout() {
   document.getElementById('checkoutOverlay').style.display = 'none';
-  document.getElementById('checkoutDrawer').style.display = 'none';
+  document.getElementById('checkoutDrawer').style.display  = 'none';
   document.body.style.overflow = '';
 }

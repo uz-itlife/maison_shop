@@ -3,7 +3,10 @@
 # Игнорируем логи и системные файлы
 node_modules/
 .DS_Store
+.env.local
 .env
 
 # Если у вас была папка с настройками редактора
 .vscode/
+
+js/config.local.js

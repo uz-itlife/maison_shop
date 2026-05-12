@@ -1,5 +1,5 @@
 git add .
-git commit -m "fix peyment"
+git commit -m "fix table "
 git push
 
 

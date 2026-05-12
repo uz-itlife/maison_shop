@@ -700,7 +700,7 @@
     gap: 14px;
 }
 
-.social-btn {
+/* .social-btn {
     width: 44px;
     height: 44px;
     border-radius: 50%;
@@ -720,7 +720,7 @@
     transition: transform 0.3s ease;
 }
 
-/* Цвета при наведении (официальные брендовые) */
+
 .social-btn.instagram:hover {
     background: #E1306C;
     border-color: #E1306C;
@@ -747,7 +747,62 @@
     border-color: #EE1D52;
     color: white;
     transform: scale(1.08);
-}
+} */
+
+.instagram-round-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #405DE6, #E1306C, #FD1D1D);
+    border-radius: 50%;
+    box-shadow: 0 6px 20px rgba(225, 48, 108, 0.35);
+    transition: all 0.4s ease;
+    text-decoration: none;
+  }
+
+  .instagram-round-btn:hover {
+    transform: scale(1.12) rotate(8deg);
+    box-shadow: 0 10px 30px rgba(225, 48, 108, 0.5);
+  }
+
+  .instagram-round-btn:active {
+    transform: scale(0.92);
+  }
+
+  .instagram-round-btn svg {
+    transition: transform 0.4s ease;
+  }
+
+  .instagram-round-btn:hover svg {
+    transform: scale(1.1);
+  }
+
+  .social-round-btn {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 8px 25px -4px rgba(0, 0, 0, 0.3);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+  }
+
+  .social-round-btn:hover {
+    transform: scale(1.12) rotate(8deg);
+    box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.4);
+  }
+
+  .social-round-btn svg {
+    transition: transform 0.4s ease;
+  }
+
+  .social-round-btn:hover svg {
+    transform: scale(1.12);
+  }
     .footer-col-title { font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--clr-text); margin-bottom: 24px; }
     .footer-links { display: flex; flex-direction: column; gap: 12px; }
     .footer-links a { font-size: 13px; color: var(--clr-muted); transition: color var(--transition); }

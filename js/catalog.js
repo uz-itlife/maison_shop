@@ -43,16 +43,19 @@ async function initCatalog() {
     const res = await fetch('data/products.json');
     if (res.ok) {
       onProductsLoaded(await res.json());
-    } else {
-      throw new Error();
+      return;
     }
-  } catch {
-    window.addEventListener('load', () => {
-      if (typeof products !== 'undefined' && products.length) {
-        onProductsLoaded(products);
-      }
-    });
-  }
+  } catch {}
+
+  // Fallback — ждём пока script.js инициализирует products
+  const waitForProducts = () => {
+    if (typeof products !== 'undefined' && products.length) {
+      onProductsLoaded(products);
+    } else {
+      setTimeout(waitForProducts, 50); // ждём 50мс и пробуем снова
+    }
+  };
+  waitForProducts();
 }
 
 document.addEventListener('DOMContentLoaded', initCatalog);
@@ -138,9 +141,13 @@ function buildFilters() {
     </div>` : ''}
   `;
 
-  document.getElementById('filtersContent').innerHTML = html;
-  document.getElementById('filterDrawerContent').innerHTML = html;
-  syncPriceUI();
+  const sidebar = document.getElementById('filtersContent');
+if (sidebar) sidebar.innerHTML = html;
+
+const drawer = document.getElementById('filterDrawerContent');
+if (drawer) drawer.innerHTML = html;
+
+syncPriceUI();
 }
 
 // ====================== СЛАЙДЕР ЦЕНЫ ======================
@@ -256,8 +263,11 @@ function applyFilters() {
   renderCatalog();
 }
 
-// ---- АКТИВНЫЕ ТЕГИ (исправлено удаление цены) ----
+// ---- АКТИВНЫЕ ТЕГИ ----
 function updateActiveTags(search, priceMin, priceMax) {
+  const container = document.getElementById('activeTags');
+  if (!container) return; // ← страница без каталога — выходим
+
   const tags = [];
   activeCategories.forEach(c => tags.push({ label: c, remove: () => { activeCategories.delete(c); applyFilters(); } }));
   activeBadges.forEach(b => {
@@ -269,24 +279,16 @@ function updateActiveTags(search, priceMin, priceMax) {
   if (priceMax < MAX_PRICE) {
     tags.push({
       label: `до ${Number(priceMax).toLocaleString('ru')} сум`,
-      remove: () => {
-        priceMaxFilter = MAX_PRICE;
-        syncPriceUI();
-        applyFilters();
-      }
+      remove: () => { priceMaxFilter = MAX_PRICE; syncPriceUI(); applyFilters(); }
     });
   }
   if (search) {
     tags.push({
       label: `«${search}»`,
-      remove: () => {
-        document.getElementById('catalogSearch').value = '';
-        applyFilters();
-      }
+      remove: () => { const s = document.getElementById('catalogSearch'); if (s) s.value = ''; applyFilters(); }
     });
   }
 
-  const container = document.getElementById('activeTags');
   container.innerHTML = tags.map((t, i) => `
     <span class="active-filter-tag" onclick="tags${i}remove()">
       ${t.color ? `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${t.color}"></span>` : ''}
@@ -300,6 +302,8 @@ function updateActiveTags(search, priceMin, priceMax) {
 // ---- РЕНДЕР И ПАГИНАЦИЯ ----
 function renderCatalog() {
   const grid = document.getElementById('catalogGrid');
+  if (!grid) return;  // ← главная защита
+
   const info = document.getElementById('resultsInfo');
   const total = displayProducts.length;
 
@@ -425,3 +429,5 @@ function observeFadeUp() {
   }, { threshold: 0.06 });
   els.forEach(el => obs.observe(el));
 }
+
+
